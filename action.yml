@@ -160,7 +160,7 @@ runs:
       run: |
         python -m pip install --upgrade pip
         pip install requests blackduck_direct_scan_action
-        echo "detectOpts=detect.code.location.name=${{inputs.blackduck_project}},${{inputs.blackduck_detect_opts}}" >> $GITHUB_ENV
+        echo "detectOpts=detect.code.location.name=${{inputs.blackduck_project}}-${{inputs.blackduck_version}},${{inputs.blackduck_detect_opts}}" >> $GITHUB_ENV
       shell: bash
     # Run manual full/intelligent scan
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'push'}}

@@ -6,14 +6,6 @@ branding:
   color: blue
 inputs:
   #------------Common inputs------------------------#
-  project:
-    description: Project name, if not given then default=github.repository
-    required: false
-    default: ${{github.repository}}
-  branch:
-    description: Project branch name, if not given then default=github.ref_name
-    required: false
-    default: ${{github.ref_name}}
   log_level:
     description: Logging level. Default is INFO.
     default: INFO
@@ -25,7 +17,18 @@ inputs:
   build_command:
     description: Application build command. Ex. mvn clean install
     required: false
+  github_token:
+    description: "Pass the GitHub token to the script in order to create PRs"
+    required: false
   #------------Polaris related inputs------------------------#
+  polaris_project:
+    description: Project name, if not given then default=github.repository
+    required: false
+    default: ${{github.repository}}
+  polaris_branch:
+    description: Project branch name, if not given then default=github.ref_name
+    required: false
+    default: ${{github.ref_name}}
   polaris_url:
     description: URL for Polaris where the thin client can be downloaded
     required: true
@@ -64,6 +67,33 @@ inputs:
     description: "What version of Polaris thin client is needed, example: 2022.9.0 (Default)"
     default: 2022.9.0
     required: false
+  #------------Black Duck related inputs------------------------#
+  blackduck_url:
+    description: URL for Black Duck where the thin client can be downloaded
+    required: true
+  blackduck_token:
+    description: Black Duck Access Token
+    required: true
+  blackduck_project:
+    description: Project name in Black Duck, if not given then default=github.repository
+    required: false
+    default: ${{github.repository}}
+  blackduck_version:
+    description: "Project version name in Black Duck. Defaul is github.ref_name"
+    required: false
+    default: ${{github.ref_name}}
+  blackduck_detect_opts:
+    description: "Additional detect options."
+    required: false
+    default: detect.excluded.directories=node_modules,detect.blackduck.signature.scanner.exclusion.name.patterns=detect.jar,detect.npm.dependency.types.excluded=DEV,detect.wait.for.results=true,detect.tools="ALL",detect.timeout=7200,detect.detector.search.depth=20,detect.excluded.directories.search.depth=20
+  blackduck_policy_categories:
+    description: "Which policy category vulnerabilites are returned. SECURITY and LICENSE are default."
+    required: false
+    default: SECURITY,LICENSE #Options are [COMPONENT,SECURITY,LICENSE,UNCATEGORIZED,OPERATIONAL]
+  blackduck_sarif:
+    description: By setting this true, you will get results output as a sarif format file. Default is false.
+    required: false
+    default: false
   #------------Which tools are activated------------------------#
   polaris:
     description: "If this is true, then Polaris analysis is done. Default is false."
@@ -77,6 +107,7 @@ inputs:
 runs:
   using: composite
   steps:
+    #------------Polaris------------------------#
     - if: ${{inputs.polaris == 'true'}}
       name: Coverity Commit phase
       uses: synopsys-sig-community/setup-polaris-analysis@main
@@ -90,8 +121,8 @@ runs:
     - if: ${{inputs.polaris == 'true'}}
       uses: synopsys-sig-community/polaris-analysis@main
       with:
-        project: ${{inputs.project}}
-        branch: ${{inputs.branch}}
+        project: ${{inputs.polaris_project}}
+        branch: ${{inputs.polaris_branch}}
         log_level: ${{inputs.log_level}}
         polaris_config_overrides: ${{inputs.polaris_config_overrides}}
         polaris_analysis_mode: ${{inputs.polaris_analysis_mode}}
@@ -99,17 +130,63 @@ runs:
         polaris_sarif: ${{inputs.polaris_sarif}}
         polaris_sarif_file: ${{inputs.polaris_sarif_file}}
         build_command: ${{inputs.build_command}}
-
     - if: ${{inputs.polaris_sarif == 'true' && inputs.polaris == 'true'}}
       name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v2
       with:
         # Path to SARIF file
         sarif_file: ${{inputs.polaris_sarif_file}}
-
     - if: ${{inputs.polaris_sarif == 'true' && inputs.polaris == 'true'}}
       name: Archive scanning results
       uses: actions/upload-artifact@v3
       with:
         name: polaris-scan-results
         path: ${{inputs.polaris_sarif_file}}
+
+    #------------Black Duck------------------------#
+    - if: ${{inputs.blackduck == 'true'}}
+      name: Setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9 #install the python needed
+    - if: ${{inputs.blackduck == 'true'}}
+      name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests blackduck_direct_scan_action
+        echo "detectOpts=detect.code.location.name=${{inputs.blackduck_project}},${{inputs.blackduck_detect_opts}}" >> $GITHUB_ENV
+      shell: bash
+    # Run manual full/intelligent scan
+    - if: ${{inputs.blackduck == 'true' && github.event_name == 'push'}}
+      name: Run Black Duck Full Scan
+      run: |
+        blackduck-direct-scan-action --debug=${{ inputs.log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode intelligent --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
+      shell: bash
+      env:
+        # Pass the GitHub token to the script in order to create PRs
+        GITHUB_TOKEN: ${{ inputs.github_token }}        
+    - if: ${{inputs.blackduck == 'true' && github.event_name == 'push'}}
+      name: Create sarif -format report from full scan
+      run: |
+        python scripts/blackduckResultsToSarif.py --url=${{inputs.blackduck_url}} --token=${{inputs.blackduck_token}} --project=${{inputs.blackduck_project}} --version=${{inputs.blackduck_version}} --policyCategories=${{inputs.blackduck_policy_categories}} --log_level=${{inputs.log_level}} --outputFile=blackduck-sarif.json
+      shell: bash
+    # Run Black Duck rapid scan
+    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request'}}
+      name: Run Black Duck Rapid Scan
+      run: |
+        blackduck-direct-scan-action --debug=${{ inputs.log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode rapid --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
+      shell: bash
+      env:
+        # Pass the GitHub token to the script in order to create PRs
+        GITHUB_TOKEN: ${{ inputs.github_token }}  
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+      name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: blackduck-sarif.json
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+      name: Archive scanning results
+      uses: actions/upload-artifact@v3
+      with:
+        name: bd-scan-results
+        path: blackduck-sarif.json

@@ -13,7 +13,7 @@ inputs:
   cache: 
     description: Tools can be cached by setting this to true. Default is true.
     required: false
-    default: true
+    default: "true"
   build_command:
     description: Application build command. Ex. mvn clean install
     required: false
@@ -50,7 +50,7 @@ inputs:
   polaris_sarif:
     description: By setting this true, you will get results output as a sarif format file. Default is false.
     required: false
-    default: false
+    default: "false"
   polaris_sarif_file:
     description: "If polaris_sarif: true, then this is used, to specify the output file with full path. Default: github.workspace/polaris-scan-results.sarif.json"
     required: false
@@ -93,16 +93,16 @@ inputs:
   blackduck_sarif:
     description: By setting this true, you will get results output as a sarif format file. Default is false.
     required: false
-    default: false
+    default: "false"
   #------------Which tools are activated------------------------#
   polaris:
     description: "If this is true, then Polaris analysis is done. Default is false."
     required: false
-    default: false
+    default: "false"
   blackduck:
     description: "If this is true, then Black Duck analysis is done. Default is false."
     required: false
-    default: false
+    default: "false"
 
 runs:
   using: composite

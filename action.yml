@@ -83,9 +83,9 @@ inputs:
     required: false
     default: ${{github.ref_name}}
   blackduck_detect_opts:
-    description: "Additional detect options."
+    description: "Additional detect options. Comma separated list."
     required: false
-    default: detect.excluded.directories=node_modules,detect.blackduck.signature.scanner.exclusion.name.patterns=detect.jar,detect.npm.dependency.types.excluded=DEV,detect.wait.for.results=true,detect.tools="ALL",detect.timeout=7200,detect.detector.search.depth=20,detect.excluded.directories.search.depth=20
+    default: detect.tools="ALL"
   blackduck_policy_categories:
     description: "Which policy category vulnerabilites are returned. SECURITY and LICENSE are default."
     required: false
@@ -160,7 +160,7 @@ runs:
       run: |
         python -m pip install --upgrade pip
         pip install requests blackduck_direct_scan_action
-        echo "detectOpts=detect.code.location.name=${{inputs.blackduck_project}}-${{inputs.blackduck_version}},${{inputs.blackduck_detect_opts}}" >> $GITHUB_ENV
+        echo "detectOpts=detect.code.location.name=${{inputs.blackduck_project}}-${{inputs.blackduck_version}},detect.timeout=7200,detect.detector.search.depth=20,detect.excluded.directories.search.depth=20,detect.excluded.directories=node_modules,detect.blackduck.signature.scanner.exclusion.name.patterns=detect.jar,detect.npm.dependency.types.excluded=DEV,detect.wait.for.results=true,${{inputs.blackduck_detect_opts}}" >> $GITHUB_ENV
       shell: bash
     # Run manual full/intelligent scan
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'}}

@@ -94,6 +94,10 @@ inputs:
     description: By setting this true, you will get results output as a sarif format file. Default is false.
     required: false
     default: "false"
+  blackduck_log_level:
+    description: Logging level. Default is 0 = INFO and 9 = DEBUG.
+    default: 0 # 0 = INFO and 9 = DEBUG
+    required: false
   #------------Which tools are activated------------------------#
   polaris:
     description: "If this is true, then Polaris analysis is done. Default is false."
@@ -162,7 +166,7 @@ runs:
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'push'}}
       name: Run Black Duck Full Scan
       run: |
-        blackduck-direct-scan-action --debug=${{ inputs.log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode intelligent --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
+        blackduck-direct-scan-action --debug=${{ inputs.blackduck_log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode intelligent --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
       shell: bash
       env:
         # Pass the GitHub token to the script in order to create PRs
@@ -170,13 +174,13 @@ runs:
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'push' && inputs.blackduck_sarif == 'true'}}
       name: Create sarif -format report from full scan
       run: |
-        python scripts/blackduckResultsToSarif.py --url=${{inputs.blackduck_url}} --token=${{inputs.blackduck_token}} --project=${{inputs.blackduck_project}} --version=${{inputs.blackduck_version}} --policyCategories=${{inputs.blackduck_policy_categories}} --log_level=${{inputs.log_level}} --outputFile=blackduck-sarif.json
+        python scripts/blackduckResultsToSarif.py --url=${{inputs.blackduck_url}} --token=${{inputs.blackduck_token}} --project=${{inputs.blackduck_project}} --version=${{inputs.blackduck_version}} --policyCategories=${{inputs.blackduck_policy_categories}} --log_level=${{inputs.blackduck_log_level}} --outputFile=blackduck-sarif.json
       shell: bash
     # Run Black Duck rapid scan
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request'}}
       name: Run Black Duck Rapid Scan
       run: |
-        blackduck-direct-scan-action --debug=${{ inputs.log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode rapid --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
+        blackduck-direct-scan-action --debug=${{ inputs.blackduck_log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode rapid --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
       shell: bash
       env:
         # Pass the GitHub token to the script in order to create PRs

@@ -1,0 +1,115 @@
+name: "Application Security Analsysis tools"
+description: "This action will use other security scanning tools to do different security scannings."
+author: Jouni Lehto
+branding:
+  icon: code
+  color: blue
+inputs:
+  #------------Common inputs------------------------#
+  project:
+    description: Project name, if not given then default=github.repository
+    required: false
+    default: ${{github.repository}}
+  branch:
+    description: Project branch name, if not given then default=github.ref_name
+    required: false
+    default: ${{github.ref_name}}
+  log_level:
+    description: Logging level. Default is INFO.
+    default: INFO
+    required: false
+  cache: 
+    description: Tools can be cached by setting this to true. Default is true.
+    required: false
+    default: true
+  build_command:
+    description: Application build command. Ex. mvn clean install
+    required: false
+  #------------Polaris related inputs------------------------#
+  polaris_url:
+    description: URL for Polaris where the thin client can be downloaded
+    required: true
+  polaris_token:
+    description: Polaris Access Token
+    required: true
+  polaris_config_overrides:
+    description: "With this you can overriding the configuration file. More info: https://sig-docs.synopsys.com/polaris/topics/c_cli-config-overrides.html"
+    required: false
+    default: --co analyze.coverity.cov-analyze='["--enable", "HARDCODED_CREDENTIALS", "--security", "--webapp-security", "--android-security"]'
+  polaris_analysis_mode:
+    description: Analysis mode will tell the action that is local or central analysis requested, Options are local and central (Default).
+    required: false
+    default: central
+  polaris_config_file:
+    description: "By giving this input, you specify which polaris.yaml file to use. If this is given, then only configurations given inside of the config file, \
+                  will be used. If not given then will set polaris server url with flag -s"
+    required: false
+  polaris_sarif:
+    description: By setting this true, you will get results output as a sarif format file. Default is false.
+    required: false
+    default: false
+  polaris_sarif_file:
+    description: "If polaris_sarif: true, then this is used, to specify the output file with full path. Default: github.workspace/polaris-scan-results.sarif.json"
+    required: false
+    default: ${{github.workspace}}/polaris-scan-results.sarif.json
+  polaris_install_folder:
+    description: To which folder the tools are extracted. Default is /tmp/cache/polaris
+    required: false
+    default: /tmp/cache/polaris
+  polaris_platform:
+    description: "What platform of Polaris thin client is needed, example: linux64 (Default). Fow Windows win64 and for MacOS macosx"
+    default: "linux64"
+    required: false
+  polaris_version:
+    description: "What version of Polaris thin client is needed, example: 2022.9.0 (Default)"
+    default: 2022.9.0
+    required: false
+  #------------Which tools are activated------------------------#
+  polaris:
+    description: "If this is true, then Polaris analysis is done. Default is false."
+    required: false
+    default: false
+  blackduck:
+    description: "If this is true, then Black Duck analysis is done. Default is false."
+    required: false
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - if: ${{inputs.polaris == 'true'}}
+      name: Coverity Commit phase
+      uses: synopsys-sig-community/setup-polaris-analysis@main
+      with:
+        polaris_url: ${{inputs.polaris_url}}
+        polaris_token: ${{inputs.polaris_token}}
+        polaris_install_folder: ${{inputs.polaris_install_folder}}
+        polaris_platform: ${{inputs.polaris_platform}}
+        polaris_version: ${{inputs.polaris_version}}
+        cache: ${{inputs.polaris_cache}}
+    - if: ${{inputs.polaris == 'true'}}
+      uses: synopsys-sig-community/polaris-analysis@main
+      with:
+        project: ${{inputs.project}}
+        branch: ${{inputs.branch}}
+        log_level: ${{inputs.log_level}}
+        polaris_config_overrides: ${{inputs.polaris_config_overrides}}
+        polaris_analysis_mode: ${{inputs.polaris_analysis_mode}}
+        polaris_config_file: ${{inputs.polaris_config_file}}
+        polaris_sarif: ${{inputs.polaris_sarif}}
+        polaris_sarif_file: ${{inputs.polaris_sarif_file}}
+        build_command: ${{inputs.build_command}}
+
+    - if: ${{inputs.polaris_sarif == 'true' && inputs.polaris == 'true'}}
+      name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        # Path to SARIF file
+        sarif_file: ${{inputs.polaris_sarif_file}}
+
+    - if: ${{inputs.polaris_sarif == 'true' && inputs.polaris == 'true'}}
+      name: Archive scanning results
+      uses: actions/upload-artifact@v3
+      with:
+        name: polaris-scan-results
+        path: ${{inputs.polaris_sarif_file}}

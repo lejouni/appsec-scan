@@ -1,5 +1,5 @@
 name: "Application Security Analsysis tools"
-description: "This action will use other security scanning tools to do different security scannings."
+description: "This action will use other security scanning tools to do different type of security scannings."
 author: Jouni Lehto
 branding:
   icon: code
@@ -111,7 +111,7 @@ inputs:
 runs:
   using: composite
   steps:
-    #------------Polaris------------------------#
+    #---------Coverity on Polaris------------------------#
     - if: ${{inputs.polaris == 'true'}}
       name: Coverity Commit phase
       uses: synopsys-sig-community/setup-polaris-analysis@main
@@ -177,7 +177,7 @@ runs:
         python scripts/blackduckResultsToSarif.py --url=${{inputs.blackduck_url}} --token=${{inputs.blackduck_token}} --project=${{inputs.blackduck_project}} --version=${{inputs.blackduck_version}} --policyCategories=${{inputs.blackduck_policy_categories}} --log_level=${{inputs.blackduck_log_level}} --outputFile=blackduck-sarif.json
       shell: bash
     # Run Black Duck rapid scan
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request'}}
+    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'}}
       name: Run Black Duck Rapid Scan
       run: |
         blackduck-direct-scan-action --debug=${{ inputs.blackduck_log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode rapid --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
@@ -198,3 +198,5 @@ runs:
         name: bd-scan-results
         path: blackduck-sarif.json
       continue-on-error: true
+
+    #------------Next tool------------------------#

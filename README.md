@@ -1,7 +1,7 @@
 # appsec-scan
 This Action will combine the application security scanning tools
 
-##Usage examples
+## Usage examples
 ```yaml
 name: CI with Security Scanning
 

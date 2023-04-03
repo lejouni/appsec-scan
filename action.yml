@@ -215,10 +215,10 @@ runs:
         github_token: ${{ inputs.github_token }}
         # Optional parameter. By default, create fix pull requests if vulnerabilities are reported
         # Passing false will disable fix pull request creation
-        # blackduck_automation_fixpr: false
+        blackduck_automation_fixpr: false
         # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
         # Single parameter
-        # blackduck_scan_failure_severities: "NONE"
+        blackduck_scan_failure_severities: "BLOCKER"
         # multiple parameters
         # blackduck_scan_failure_severities: "BLOCKER,CRITICAL,TRIVIAL"
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'push'}}}

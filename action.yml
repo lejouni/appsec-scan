@@ -230,7 +230,7 @@ runs:
     #------------Next tool------------------------#
     - if: ${{inputs.cnc == 'true'}}
       name: Synopsys Action
-      uses: synopsys-sig/synopsys-action@1.1.0
+      uses: synopsys-sig/synopsys-action@v1.1.0
       with:
         coverity_url: ${{ inputs.cnc_url }}
         coverity_user: ${{ inputs.cnc_username }}

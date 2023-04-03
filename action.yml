@@ -96,7 +96,7 @@ inputs:
     default: "false"
   blackduck_log_level:
     description: Logging level. Default is 0 = INFO and 9 = DEBUG.
-    default: 0 # 0 = INFO and 9 = DEBUG
+    default: "0" # 0 = INFO and 9 = DEBUG
     required: false
   #------------CNC related inputs------------------------#
   cnc_url:

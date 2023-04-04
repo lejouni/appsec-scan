@@ -267,7 +267,7 @@ runs:
         coverity_stream_name: ${{ inputs.cnc_stream }}
         coverity_repository_name: ${{ inputs.cnc_repository_name }}
         coverity_branch_name: ${{ inputs.cnc_branche_name }}
-    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true' && github.event_name == 'push'}}}
+    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}}
       uses: lejouni/cnc-sarif-formatter@main
       with:
         url: ${{ inputs.cnc_url }}

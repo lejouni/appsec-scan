@@ -223,11 +223,13 @@ runs:
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}-${{inputs.blackduck_version}}
         DETECT_TIMEOUT: "7200"
-        DETECT_DECTOR_SEARCH_DEPTH: "20"
-        DETECT_EXCLUDE_DIRECTORIES_SEARCH_DEPTH: "20"
-        DETECT_EXCLUDE_DIRECTORIES: node_modules
+        DETECT_DETECTOR_SEARCH_DEPTH: "20"
+        DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
+        DETECT_EXCLUDED_DIRECTORIES: node_modules
         DETECT_BLACKDUCK_SIGNATURE_EXCLUSION_NAME_PATTERNS: detect.jar
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
+        DETECT_TOOLS: "ALL"
+
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'push'}}}
       uses: lejouni/blackduck-sarif-formatter@main
       with:
@@ -249,7 +251,7 @@ runs:
         path: blackduck-sarif.json
       continue-on-error: true
 
-    #------------Next tool------------------------#
+    #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}
       name: CNC Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.1.0
@@ -284,3 +286,4 @@ runs:
         name: cnc-scan-results
         path: ${{inputs.cnc_sarif_file}}
       continue-on-error: true
+    #------------Next tool------------------------#

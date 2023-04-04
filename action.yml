@@ -122,6 +122,14 @@ inputs:
   cnc_branche_name:
     description: Project branch name
     required: false
+  cnc_sarif:
+    description: Project branch name
+    required: false
+    default: "false"
+  cnc_sarif_file:
+    description: "If cnc_sarif: true, then this is used, to specify the output file with full path. Default: github.workspace/cnc-scan-results.sarif.json"
+    required: false
+    default: ${{github.workspace}}/cnc-scan-results.sarif.json
   #------------Which tools are activated------------------------#
   polaris:
     description: "If this is true, then Polaris analysis is done. Default is false."
@@ -260,3 +268,26 @@ runs:
         # Below fields are optional
         coverity_repository_name: ${{ inputs.cnc_repository_name }}
         coverity_branch_name: ${{ inputs.cnc_branche_name }}
+    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true' && github.event_name == 'push'}}}
+      uses: lejouni/cnc-sarif-formatter@main
+      with:
+        url: ${{ inputs.cnc_url }}
+        username: ${{ inputs.cnc_username }}
+        password: ${{ inputs.cnc_passphare }}
+        project: ${{ inputs.cnc_project }}
+        stream: ${{ inputs.cnc_stream }}
+        outputFile: ${{inputs.cnc_sarif_file}}
+
+    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
+      name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: ${{inputs.cnc_sarif_file}}
+      continue-on-error: true
+    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
+      name: Archive scanning results
+      uses: actions/upload-artifact@v3
+      with:
+        name: cnc-scan-results
+        path: ${{inputs.cnc_sarif_file}}
+      continue-on-error: true

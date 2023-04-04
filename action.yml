@@ -212,7 +212,7 @@ runs:
         # Pass the GitHub token to the script in order to create PRs
         GITHUB_TOKEN: ${{ inputs.github_token }}  
     #------------Black Duck full------------------------#
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_full_scan == 'true'}}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_full_scan == 'true'}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.1.0
       with:
@@ -234,7 +234,7 @@ runs:
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
         DETECT_TOOLS: "ALL"
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && inputs.blackduck_full_scan == 'true'}}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && inputs.blackduck_full_scan == 'true'}}
       uses: lejouni/blackduck-sarif-formatter@main
       with:
         url: ${{ inputs.blackduck_url }}

@@ -257,15 +257,8 @@ runs:
         coverity_url: ${{ inputs.cnc_url }}
         coverity_user: ${{ inputs.cnc_username }}
         coverity_passphrase: ${{ inputs.cnc_passphare }}
-        # Many customers prefer to set their Coverity project and stream names to match
-        # the GitHub repository name
         coverity_project_name: ${{ inputs.cnc_project }}
         coverity_stream_name: ${{ inputs.cnc_stream }}
-        # Optionally you may specify the ID number of a saved view to apply as a "break the build" policy.
-        # If any defects are found within this view when applied to the project, the build will be failed
-        # with an exit code.
-        #coverity_policy_view: 100001
-        # Below fields are optional
         coverity_repository_name: ${{ inputs.cnc_repository_name }}
         coverity_branch_name: ${{ inputs.cnc_branche_name }}
     - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true' && github.event_name == 'push'}}}

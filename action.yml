@@ -98,6 +98,10 @@ inputs:
     description: Logging level. Default is 0 = INFO and 9 = DEBUG.
     default: "0" # 0 = INFO and 9 = DEBUG
     required: false
+  blackduck_full_scan:
+    description: Setting this to true, black duck full scan is executed, otherwise if blackduck is true, then RAPID -scan is done.
+    default: "false"
+    required: false
   #------------CNC related inputs------------------------#
   cnc_url:
     description: URL for CNC.
@@ -186,12 +190,12 @@ runs:
       continue-on-error: true
 
     #------------Black Duck incremental------------------------#
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request'}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_full_scan == 'false'}}
       name: Setup python
       uses: actions/setup-python@v4
       with:
         python-version: 3.9 #install the python needed
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request'}}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_full_scan == 'false'}}}
       name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -199,7 +203,7 @@ runs:
         echo "detectOpts=detect.code.location.name=${{inputs.blackduck_project}}-${{inputs.blackduck_version}},detect.timeout=7200,detect.detector.search.depth=20,detect.excluded.directories.search.depth=20,detect.excluded.directories=node_modules,detect.blackduck.signature.scanner.exclusion.name.patterns=detect.jar,detect.npm.dependency.types.excluded=DEV,detect.wait.for.results=true,${{inputs.blackduck_detect_opts}}" >> $GITHUB_ENV
       shell: bash
     # Run Black Duck rapid scan
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request'}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_full_scan == 'false'}}
       name: Run Black Duck Rapid Scan
       run: |
         blackduck-direct-scan-action --debug=${{ inputs.blackduck_log_level }} --bd_url ${{ inputs.blackduck_url }} --bd_token ${{ inputs.blackduck_token }} --mode rapid --bd_trustcert true --project=${{ inputs.blackduck_project }} --version=${{ inputs.blackduck_version }} --sarif blackduck-sarif.json --detect_opts	${{ env.detectOpts }}
@@ -208,7 +212,7 @@ runs:
         # Pass the GitHub token to the script in order to create PRs
         GITHUB_TOKEN: ${{ inputs.github_token }}  
     #------------Black Duck full------------------------#
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'push'}}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_full_scan == 'true'}}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.1.0
       with:
@@ -230,7 +234,7 @@ runs:
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
         DETECT_TOOLS: "ALL"
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'push'}}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && inputs.blackduck_full_scan == 'true'}}}
       uses: lejouni/blackduck-sarif-formatter@main
       with:
         url: ${{ inputs.blackduck_url }}

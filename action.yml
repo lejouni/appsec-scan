@@ -273,7 +273,6 @@ runs:
         url: ${{ inputs.cnc_url }}
         username: ${{ inputs.cnc_username }}
         password: ${{ inputs.cnc_passphare }}
-        project: ${{ inputs.cnc_project }}
         stream: ${{ inputs.cnc_stream }}
         outputFile: ${{inputs.cnc_sarif_file}}
 

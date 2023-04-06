@@ -55,6 +55,9 @@ inputs:
     description: "If polaris_sarif: true, then this is used, to specify the output file with full path. Default: github.workspace/polaris-scan-results.sarif.json"
     required: false
     default: ${{github.workspace}}/polaris-scan-results.sarif.json
+  polaris_issue_status:
+    description: Indicates which issues are returned based on the status, if not given, then all are returned. Options are opened,closed.
+    required: false
   polaris_install_folder:
     description: To which folder the tools are extracted. Default is /tmp/cache/polaris
     required: false
@@ -173,6 +176,7 @@ runs:
         polaris_config_file: ${{inputs.polaris_config_file}}
         polaris_sarif: ${{inputs.polaris_sarif}}
         polaris_sarif_file: ${{inputs.polaris_sarif_file}}
+        polaris_issue_status: ${{inputs.polaris_issue_status}}
         build_command: ${{inputs.build_command}}
     - if: ${{inputs.polaris_sarif == 'true' && inputs.polaris == 'true'}}
       name: Upload SARIF file

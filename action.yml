@@ -236,7 +236,7 @@ runs:
         DETECT_EXCLUDED_DIRECTORIES: node_modules
         DETECT_BLACKDUCK_SIGNATURE_EXCLUSION_NAME_PATTERNS: detect.jar
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
-        DETECT_TOOLS: "ALL"
+        DETECT_TOOLS: "ALL,IAC_SCAN"
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && inputs.blackduck_full_scan == 'true'}}
       uses: lejouni/blackduck-sarif-formatter@main

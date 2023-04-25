@@ -193,7 +193,7 @@ runs:
         path: ${{inputs.polaris_sarif_file}}
       continue-on-error: true
     #------------Black Duck full------------------------#
-    - if: ${{inputs.blackduck == 'true'}
+    - if: ${{inputs.blackduck == 'true'}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.1.0
       with:

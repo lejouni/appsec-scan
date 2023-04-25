@@ -105,6 +105,10 @@ inputs:
     description: Setting this to true, black duck full scan is executed, otherwise if blackduck is true, then RAPID -scan is done.
     default: "false"
     required: false
+  blackduck_policies:
+    description: "If given, policy information is added"
+    default: "false"
+    required: false
   #------------CNC related inputs------------------------#
   cnc_url:
     description: URL for CNC.
@@ -227,6 +231,7 @@ runs:
         blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
         blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
+        blackduck_policies: ${{ inputs.blackduck_policies }}
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
       name: Upload SARIF file

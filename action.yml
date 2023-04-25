@@ -217,6 +217,7 @@ runs:
         DETECT_BLACKDUCK_SIGNATURE_EXCLUSION_NAME_PATTERNS: detect.jar
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
         DETECT_TOOLS: "ALL,IAC_SCAN" #All is not activating IaC scan, it needs to be activate separately with IAC_SCAN
+      continue-on-error: true
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
       uses: lejouni/blackduck-sarif-formatter@main

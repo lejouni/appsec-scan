@@ -97,10 +97,6 @@ inputs:
     description: By setting this true, you will get results output as a sarif format file. Default is false.
     required: false
     default: "false"
-  blackduck_log_level:
-    description: Logging level. Default is 0 = INFO and 9 = DEBUG.
-    default: "0" # 0 = INFO and 9 = DEBUG
-    required: false
   blackduck_full_scan:
     description: Setting this to true, black duck full scan is executed, otherwise if blackduck is true, then RAPID -scan is done.
     default: "false"
@@ -232,7 +228,7 @@ runs:
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
         blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
         blackduck_policies: ${{ inputs.blackduck_policies }}
-        blackduck_log_level: ${{ inputs.blackduck_log_level }}
+        blackduck_log_level: ${{ inputs.log_level }}
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
       name: Upload SARIF file

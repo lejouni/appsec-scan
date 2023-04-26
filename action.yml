@@ -232,6 +232,7 @@ runs:
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
         blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
         blackduck_policies: ${{ inputs.blackduck_policies }}
+        blackduck_log_level: ${{ inputs.blackduck_log_level }}
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
       name: Upload SARIF file

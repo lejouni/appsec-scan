@@ -192,10 +192,10 @@ runs:
         name: polaris-scan-results
         path: ${{inputs.polaris_sarif_file}}
       continue-on-error: true
-    #------------Black Duck full------------------------#
+    #------------Black Duck ------------------------#
     - if: ${{inputs.blackduck == 'true'}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.1.0
+      uses: synopsys-sig/synopsys-action@v1.2.0
       with:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -247,7 +247,7 @@ runs:
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}
       name: CNC Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.1.0
+      uses: synopsys-sig/synopsys-action@v1.2.0
       with:
         coverity_url: ${{ inputs.cnc_url }}
         coverity_user: ${{ inputs.cnc_username }}

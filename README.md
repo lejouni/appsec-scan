@@ -31,15 +31,16 @@ jobs:
       with:
         #----------common param----------------#
         build_command: mvn -B package --file pom.xml
-        log_level: DEBUG
+        log_level: INFO
         cache: false
         github_token: ${{secrets.GITHUB_TOKEN}}
         #----------polaris param---------------#
-        polaris: true
+        polaris: false
         polaris_url: ${{secrets.POLARIS_SERVER_URL}}
         polaris_token: ${{secrets.POLARIS_ACCESS_TOKEN}}
         polaris_project: ${{github.repository}}
         polaris_branch: ${{github.ref_name}}
+        polaris_issue_status: opened
         polaris_sarif: true
         #----------black duck param------------#
         blackduck: true
@@ -47,6 +48,16 @@ jobs:
         blackduck_token: ${{secrets.BLACKDUCK_ACCESS_TOKEN}}
         blackduck_project: ${{github.repository}}
         blackduck_version: ${{github.ref_name}}
+        blackduck_full_scan: true
         blackduck_sarif: true
+        blackduck_policies: true
+        #----------CNC param------------#
+        cnc: false
+        cnc_url: ${{secrets.CNC_SERVER_URL}}
+        cnc_username: ${{secrets.CNC_USERNAME}}
+        cnc_passphare: ${{secrets.CNC_PASSPHARE}}
+        cnc_project: sampleapp
+        cnc_stream: ${{github.ref_name}}
+        cnc_sarif: true
     #-----------AppSec Analysis END-----------------------------------#
 ```

@@ -220,7 +220,7 @@ runs:
       continue-on-error: true
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
-      uses: synopsys-sig-community/blackduck-sarif-formatter@main
+      uses: synopsys-sig-community/blackduck-sarif-formatter@dev
       with:
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_apiToken: ${{ inputs.blackduck_token }}

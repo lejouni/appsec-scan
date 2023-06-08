@@ -179,6 +179,7 @@ runs:
         mkdir -m 777 -p ${{inputs.bridge_install_folder}}
         cd ${{inputs.bridge_install_folder}}
         wget -q https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/${{inputs.bridge_version}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
+        unzip -o -q ${{inputs.bridge_install_folder}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
         ls -la
       shell: bash
         # unzip -j -o synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip -d ${{inputs.bridge_install_folder}}  && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
@@ -234,7 +235,7 @@ runs:
         blackduck_scan_failure_severities: "NONE"
         synopsys_bridge_path: ${{inputs.bridge_install_folder}}
         bridge_download_version: ${{inputs.bridge_version}}
-        bridge_download_url: ${{inputs.bridge_install_folder}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
+        # bridge_download_url: ${{inputs.bridge_install_folder}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}

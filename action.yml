@@ -203,6 +203,7 @@ runs:
         github_token: ${{ inputs.github_token }}
         blackduck_automation_fixpr: false
         blackduck_scan_failure_severities: "NONE"
+        synopsys_bridge_path: "/tmp"
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}

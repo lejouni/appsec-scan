@@ -231,7 +231,7 @@ runs:
         github_token: ${{ inputs.github_token }}
         blackduck_automation_fixpr: false
         blackduck_scan_failure_severities: "NONE"
-        synopsys_bridge_path: ${{inputs.bridge_install_folder}}
+        synopsys_bridge_path: '/tmp'
         bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}

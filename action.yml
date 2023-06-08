@@ -180,6 +180,7 @@ runs:
         cd ${{inputs.bridge_install_folder}}
         wget -q https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/${{inputs.bridge_version}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
         unzip -j -o synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip -d ${{inputs.bridge_install_folder}} && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
+        ${{inputs.bridge_install_folder}}/synopsys-bridge --stage blackduck --state /tmp/synopsys-actionHcn6sq/bd_input.json
         ls -la
       shell: bash
 

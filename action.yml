@@ -22,7 +22,7 @@ inputs:
     required: false
   bridge_install_folder:
     description: "Install folder for Bridge component"
-    default: "/tmp"
+    default: "/tmp/synopsys-bridge"
     required: false
   bridge_platform:
     description: "Bridge platform linux is default. Options are linux64, win64 and macosx"
@@ -172,11 +172,10 @@ runs:
       uses: actions/cache@v3
       with:
         path: ${{inputs.bridge_install_folder}}
-        key: cache-bridge-tools-${{ inputs.bridge_platform }}-${{ inputs.bridge_version }} #Cache is for polaris_version
-    # Download the Polaris tool and extract it
+        key: cache-bridge-tools-${{ inputs.bridge_platform }}-${{ inputs.bridge_version }}
+    # Download the Bridge tool and extract it
     - if: steps.cache-bridge-tools.outputs.cache-hit != 'true'
       run: |
-        : #Get Polaris tools from Polaris and extract them
         mkdir -p ${{inputs.bridge_install_folder}}
         cd ${{inputs.bridge_install_folder}}
         wget -q https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/${{inputs.bridge_version}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip

@@ -20,6 +20,18 @@ inputs:
   github_token:
     description: "Pass the GitHub token to the script in order to create PRs"
     required: false
+  bridge_install_folder:
+    description: "Install folder for Bridge component"
+    default: "/tmp"
+    required: false
+  bridge_platform:
+    description: "Bridge platform linux is default. Options are linux64, win64 and macosx"
+    default: "linux64"
+    required: false
+  bridge_version:
+    description: "Bridge component version"
+    default: "0.2.42"
+    required: false
   #------------Polaris related inputs------------------------#
   polaris_project:
     description: Project name, if not given then default=github.repository
@@ -154,6 +166,23 @@ inputs:
 runs:
   using: composite
   steps:
+    #---------Cache Bridge tool--------------------------#
+    - if: ${{ inputs.cache == 'true'}}
+      id: cache-bridge-tools
+      uses: actions/cache@v3
+      with:
+        path: ${{inputs.bridge_install_folder}}
+        key: cache-bridge-tools-${{ inputs.bridge_platform }}-${{ inputs.bridge_version }} #Cache is for polaris_version
+    # Download the Polaris tool and extract it
+    - if: steps.cache-bridge-tools.outputs.cache-hit != 'true'
+      run: |
+        : #Get Polaris tools from Polaris and extract them
+        mkdir -p ${{inputs.bridge_install_folder}}
+        cd ${{inputs.bridge_install_folder}}
+        wget -q https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/${{inputs.bridge_version}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
+        unzip -j -o synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip -d ${{inputs.bridge_install_folder}} && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
+      shell: bash
+
     #---------Coverity on Polaris------------------------#
     - if: ${{inputs.polaris == 'true'}}
       name: Coverity Commit phase
@@ -164,7 +193,7 @@ runs:
         polaris_install_folder: ${{inputs.polaris_install_folder}}
         polaris_platform: ${{inputs.polaris_platform}}
         polaris_version: ${{inputs.polaris_version}}
-        cache: ${{inputs.polaris_cache}}
+        cache: ${{inputs.cache}}
     - if: ${{inputs.polaris == 'true'}}
       uses: synopsys-sig-community/polaris-analysis@main
       with:
@@ -203,7 +232,8 @@ runs:
         github_token: ${{ inputs.github_token }}
         blackduck_automation_fixpr: false
         blackduck_scan_failure_severities: "NONE"
-        synopsys_bridge_path: "/tmp"
+        synopsys_bridge_path: ${{inputs.bridge_install_folder}}
+        bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}

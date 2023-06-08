@@ -22,7 +22,7 @@ inputs:
     required: false
   bridge_install_folder:
     description: "Install folder for Bridge component"
-    default:  $HOME/synopsys-bridge
+    default:  /tmp/synopsys-bridge
     required: false
   bridge_platform:
     description: "Bridge platform linux is default. Options are linux64, win64 and macosx"

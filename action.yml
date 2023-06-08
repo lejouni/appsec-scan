@@ -252,30 +252,30 @@ runs:
         DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
       continue-on-error: true
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
-      uses: synopsys-sig-community/blackduck-sarif-formatter@dev
-      with:
-        blackduck_url: ${{ inputs.blackduck_url }}
-        blackduck_apiToken: ${{ inputs.blackduck_token }}
-        blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
-        blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
-        blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
-        blackduck_policies: ${{ inputs.blackduck_policies }}
-        blackduck_log_level: ${{ inputs.log_level }}
+    # - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+    #   uses: synopsys-sig-community/blackduck-sarif-formatter@dev
+    #   with:
+    #     blackduck_url: ${{ inputs.blackduck_url }}
+    #     blackduck_apiToken: ${{ inputs.blackduck_token }}
+    #     blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
+    #     blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
+    #     blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
+    #     blackduck_policies: ${{ inputs.blackduck_policies }}
+    #     blackduck_log_level: ${{ inputs.log_level }}
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
-      name: Upload SARIF file
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: blackduck-sarif.json
-      continue-on-error: true
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
-      name: Archive scanning results
-      uses: actions/upload-artifact@v3
-      with:
-        name: bd-scan-results
-        path: blackduck-sarif.json
-      continue-on-error: true
+    # - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+    #   name: Upload SARIF file
+    #   uses: github/codeql-action/upload-sarif@v2
+    #   with:
+    #     sarif_file: blackduck-sarif.json
+    #   continue-on-error: true
+    # - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+    #   name: Archive scanning results
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: bd-scan-results
+    #     path: blackduck-sarif.json
+    #   continue-on-error: true
 
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}

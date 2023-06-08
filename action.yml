@@ -213,10 +213,13 @@ runs:
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
         DETECT_DETECTOR_SEARCH_CONTINUE: "true"
         DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
-        DETECT_EXCLUDED_DIRECTORIES: node_modules
-        DETECT_BLACKDUCK_SIGNATURE_EXCLUSION_NAME_PATTERNS: detect.jar
+        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
         DETECT_TOOLS: "ALL,IAC_SCAN" #All is not activating IaC scan, it needs to be activate separately with IAC_SCAN
+        DETECT_BLACKDUCK_SIGNATURE_SCANNER_COPYRIGHT_SEARCH: "true"
+        DETECT_BLACKDUCK_SIGNATURE_SCANNER_LICENSE_SEARCH: "true"
+        # DETECT_BLACKDUCK_SIGNATURE_SCANNER_ARGUMENTS: "--exclude=/detect/"
+        DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
       continue-on-error: true
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}

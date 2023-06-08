@@ -180,9 +180,7 @@ runs:
         cd ${{inputs.bridge_install_folder}}
         wget -q https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/${{inputs.bridge_version}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
         unzip -o -q ${{inputs.bridge_install_folder}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
-        ls -la
       shell: bash
-        # unzip -j -o synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip -d ${{inputs.bridge_install_folder}}  && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
 
     #---------Coverity on Polaris------------------------#
     - if: ${{inputs.polaris == 'true'}}
@@ -235,7 +233,6 @@ runs:
         blackduck_scan_failure_severities: "NONE"
         synopsys_bridge_path: ${{inputs.bridge_install_folder}}
         bridge_download_version: ${{inputs.bridge_version}}
-        # bridge_download_url: ${{inputs.bridge_install_folder}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
@@ -255,30 +252,30 @@ runs:
         DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
       continue-on-error: true
 
-    # - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
-    #   uses: synopsys-sig-community/blackduck-sarif-formatter@dev
-    #   with:
-    #     blackduck_url: ${{ inputs.blackduck_url }}
-    #     blackduck_apiToken: ${{ inputs.blackduck_token }}
-    #     blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
-    #     blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
-    #     blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
-    #     blackduck_policies: ${{ inputs.blackduck_policies }}
-    #     blackduck_log_level: ${{ inputs.log_level }}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+      uses: synopsys-sig-community/blackduck-sarif-formatter@dev
+      with:
+        blackduck_url: ${{ inputs.blackduck_url }}
+        blackduck_apiToken: ${{ inputs.blackduck_token }}
+        blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
+        blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
+        blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
+        blackduck_policies: ${{ inputs.blackduck_policies }}
+        blackduck_log_level: ${{ inputs.log_level }}
 
-    # - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
-    #   name: Upload SARIF file
-    #   uses: github/codeql-action/upload-sarif@v2
-    #   with:
-    #     sarif_file: blackduck-sarif.json
-    #   continue-on-error: true
-    # - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
-    #   name: Archive scanning results
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: bd-scan-results
-    #     path: blackduck-sarif.json
-    #   continue-on-error: true
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+      name: Upload SARIF file
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: blackduck-sarif.json
+      continue-on-error: true
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+      name: Archive scanning results
+      uses: actions/upload-artifact@v3
+      with:
+        name: bd-scan-results
+        path: blackduck-sarif.json
+      continue-on-error: true
 
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}
@@ -292,6 +289,8 @@ runs:
         coverity_stream_name: ${{ inputs.cnc_stream }}
         coverity_repository_name: ${{ inputs.cnc_repository_name }}
         coverity_branch_name: ${{ inputs.cnc_branche_name }}
+        synopsys_bridge_path: ${{inputs.bridge_install_folder}}
+        bridge_download_version: ${{inputs.bridge_version}}
     - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
       uses: lejouni/cnc-sarif-formatter@main
       with:

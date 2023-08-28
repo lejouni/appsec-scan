@@ -82,6 +82,30 @@ inputs:
     description: "What version of Polaris thin client is needed, example: 2022.9.0 (Default)"
     default: 2022.9.0
     required: false
+
+  #------------Nextgen Polaris related inputs------------------------#
+  polaris_nextgen_project:
+    description: Project name, if not given then default=github.repository
+    required: false
+    default: ${{github.repository}}
+  polaris_nextgen_branch:
+    description: Project branch name, if not given then default=github.ref_name
+    required: false
+    default: ${{github.ref_name}}
+  polaris_nextgen_url:
+    description: URL for Polaris where the thin client can be downloaded
+    required: true
+  polaris_nextgen_token:
+    description: Polaris Access Token
+    required: true
+  polaris_nextgen_sarif:
+    description: By setting this true, you will get results output as a sarif format file. Default is false.
+    required: false
+    default: "false"
+  polaris_nextgen_sarif_file:
+    description: "If polaris_sarif: true, then this is used, to specify the output file with full path. Default: github.workspace/polaris-scan-results.sarif.json"
+    required: false
+    default: ${{github.workspace}}/polaris-scan-results.sarif.json
   #------------Black Duck related inputs------------------------#
   blackduck_url:
     description: URL for Black Duck where the thin client can be downloaded
@@ -154,6 +178,10 @@ inputs:
     description: "If this is true, then Polaris analysis is done. Default is false."
     required: false
     default: "false"
+  polaris_nextgen:
+    description: "If this is true, then Nextgen Polaris analysis is done. Default is false."
+    required: false
+    default: "false"
   blackduck:
     description: "If this is true, then Black Duck analysis is done. Default is false."
     required: false
@@ -223,7 +251,7 @@ runs:
     #------------Black Duck ------------------------#
     - if: ${{inputs.blackduck == 'true'}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.2.0
+      uses: synopsys-sig/synopsys-action@v1.3.0
       with:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -280,7 +308,7 @@ runs:
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}
       name: CNC Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.2.0
+      uses: synopsys-sig/synopsys-action@v1.3.0
       with:
         coverity_url: ${{ inputs.cnc_url }}
         coverity_user: ${{ inputs.cnc_username }}
@@ -313,4 +341,16 @@ runs:
         name: cnc-scan-results
         path: ${{inputs.cnc_sarif_file}}
       continue-on-error: true
-    #------------Next tool------------------------#
+    #------------Nextgen Polaris ------------------------#
+    - if: ${{inputs.polaris_nextgen == 'true'}}
+      name: Nextgen Polaris Analysis with synopsys-action
+      uses: synopsys-sig/synopsys-action@v1.3.0
+      with:
+          polaris_serverUrl: ${{ inputs.polaris_nextgen_url }}
+          polaris_accessToken: ${{ inputs.polaris_nextgen_token  }}
+          polaris_application_name: ${{ inputs.polaris_nextgen_project }}
+          polaris_project_name: ${{ inputs.polaris_nextgen_branch }}
+          ### Accepts Multiple Values
+          polaris_assessment_types: "SAST,SCA"
+          synopsys_bridge_path: ${{inputs.bridge_install_folder}}
+          bridge_download_version: ${{inputs.bridge_version}}

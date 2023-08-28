@@ -259,7 +259,7 @@ runs:
         github_token: ${{ inputs.github_token }}
         blackduck_automation_fixpr: false
         blackduck_scan_failure_severities: "NONE"
-        synopsys_bridge_path: ${{inputs.bridge_install_folder}}
+        synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
         bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
@@ -317,7 +317,7 @@ runs:
         coverity_stream_name: ${{ inputs.cnc_stream }}
         coverity_repository_name: ${{ inputs.cnc_repository_name }}
         coverity_branch_name: ${{ inputs.cnc_branche_name }}
-        synopsys_bridge_path: ${{inputs.bridge_install_folder}}
+        synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
         bridge_download_version: ${{inputs.bridge_version}}
     - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
       uses: lejouni/cnc-sarif-formatter@main
@@ -352,5 +352,5 @@ runs:
           polaris_project_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values
           polaris_assessment_types: "SAST,SCA"
-          synopsys_bridge_path: ${{inputs.bridge_install_folder}}
+          synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
           bridge_download_version: ${{inputs.bridge_version}}

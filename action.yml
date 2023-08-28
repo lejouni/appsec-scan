@@ -30,7 +30,7 @@ inputs:
     required: false
   bridge_version:
     description: "Bridge component version"
-    default: "0.2.42"
+    default: "latest"
     required: false
   #------------Polaris related inputs------------------------#
   polaris_project:

@@ -284,6 +284,8 @@ runs:
       uses: synopsys-sig-community/blackduck-sarif-formatter@dev
       with:
         blackduck_url: ${{ inputs.blackduck_url }}
+        blackduck_project: ${{ inputs.blackduck_project }}
+        blackduck_version: ${{ inputs.blackduck_version }}
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json

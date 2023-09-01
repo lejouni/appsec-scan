@@ -141,6 +141,12 @@ inputs:
     description: "If given, policy information is added"
     default: "false"
     required: false
+  blackduck_rapid_compare_mode:
+    description: "ALL - The default and existing Rapid Scan mode. The output is the same as before, no BOM comparisons are done. \ 
+                  BOM_COMPARE_STRICT - If the policy violation was already known and visible in the project version's component page (active or overridden), it will not be in the Rapid Scan results. Only new violations found in the scanned project and cleared violations are returned. Only policy rules that are relevant to Rapid Scans and project version BOMs will be evaluated (those with Rapid and Full scan modes selected). \
+                  BOM_COMPARE - Evaluates all policy rules that 'ALL' mode does but will apply the 'BOM_COMPARE_STRICT' logic to relevant policy rules (those with Rapid and Full scan modes selected)."
+    default: ALL
+    required: false
   #------------CNC related inputs------------------------#
   cnc_url:
     description: URL for CNC.
@@ -278,6 +284,7 @@ runs:
         DETECT_BLACKDUCK_SIGNATURE_SCANNER_LICENSE_SEARCH: "true"
         # DETECT_BLACKDUCK_SIGNATURE_SCANNER_ARGUMENTS: "--exclude=/detect/"
         DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
+        DETECT_BLACKDUCK_RAPID_COMPARE_MODE: ${{inputs.blackduck_rapid_compare_mode}} #Options are ALL (default), BOM_COMPARE_STRICT and BOM_COMPARE
       continue-on-error: true
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}

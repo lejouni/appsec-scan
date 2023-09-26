@@ -257,7 +257,7 @@ runs:
     #------------Black Duck ------------------------#
     - if: ${{inputs.blackduck == 'true'}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.4.0
+      uses: synopsys-sig/synopsys-action@v1.4.1
       with:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -317,7 +317,7 @@ runs:
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}
       name: CNC Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.4.0
+      uses: synopsys-sig/synopsys-action@v1.4.1
       with:
         coverity_url: ${{ inputs.cnc_url }}
         coverity_user: ${{ inputs.cnc_username }}
@@ -353,7 +353,7 @@ runs:
     #------------Nextgen Polaris ------------------------#
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.4.0
+      uses: synopsys-sig/synopsys-action@v1.4.1
       with:
           polaris_serverUrl: ${{ inputs.polaris_nextgen_url }}
           polaris_accessToken: ${{ inputs.polaris_nextgen_token  }}

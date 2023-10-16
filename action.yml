@@ -32,10 +32,6 @@ inputs:
     description: "Bridge component version"
     default: "1.1.0"
     required: false
-  synopsys_action_version:
-    description: "Official Synopsys Action version"
-    default: "v1.5.0"
-    required: false
   #------------Polaris related inputs------------------------#
   polaris_project:
     description: Project name, if not given then default=github.repository
@@ -261,7 +257,7 @@ runs:
     #------------Black Duck ------------------------#
     - if: ${{inputs.blackduck == 'true'}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@${{inputs.synopsys_action_version}}
+      uses: synopsys-sig/synopsys-action@v1.5.0
       with:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -321,7 +317,7 @@ runs:
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}
       name: CNC Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@${{inputs.synopsys_action_version}}
+      uses: synopsys-sig/synopsys-action@v1.5.0
       with:
         coverity_url: ${{ inputs.cnc_url }}
         coverity_user: ${{ inputs.cnc_username }}
@@ -357,7 +353,7 @@ runs:
     #------------Nextgen Polaris ------------------------#
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@${{inputs.synopsys_action_version}}
+      uses: synopsys-sig/synopsys-action@v1.5.0
       with:
           polaris_serverUrl: ${{ inputs.polaris_nextgen_url }}
           polaris_accessToken: ${{ inputs.polaris_nextgen_token  }}

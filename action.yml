@@ -300,6 +300,7 @@ runs:
         blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
         blackduck_policies: ${{ inputs.blackduck_policies }}
         blackduck_log_level: ${{ inputs.log_level }}
+        blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
       name: Upload SARIF file

@@ -261,7 +261,7 @@ runs:
     #------------Black Duck ------------------------#
     - if: ${{inputs.blackduck == 'true'}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.5.0
+      uses: synopsys-sig/synopsys-action@v1.6.0
       with:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -274,7 +274,7 @@ runs:
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
-        DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}-${{inputs.blackduck_version}}
+        DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
         DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"

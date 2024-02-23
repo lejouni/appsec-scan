@@ -126,9 +126,9 @@ inputs:
     required: false
     default: detect.tools="ALL"
   blackduck_policy_categories:
-    description: "Which policy category vulnerabilites are returned. SECURITY is default."
+    description: "Which policy category vulnerabilites are returned. SECURITY,LICENSE is default."
     required: false
-    default: SECURITY #Options are [COMPONENT,SECURITY,LICENSE,UNCATEGORIZED,OPERATIONAL]
+    default: SECURITY,LICENSE #Options are [COMPONENT,SECURITY,LICENSE,UNCATEGORIZED,OPERATIONAL]
   blackduck_sarif:
     description: By setting this true, you will get results output as a sarif format file. Default is false.
     required: false
@@ -139,6 +139,10 @@ inputs:
     required: false
   blackduck_policies:
     description: "If given, policy information is added"
+    default: "false"
+    required: false
+  blackduck_iac:
+    description: "If given, iac findings are added"
     default: "false"
     required: false
   blackduck_rapid_compare_mode:
@@ -299,6 +303,7 @@ runs:
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
         blackduck_scanOutputPath: ${{github.workspace}}/bd_scan
         blackduck_policies: ${{ inputs.blackduck_policies }}
+        blackduck_iac: ${{ inputs.blackduck_iac }}
         blackduck_log_level: ${{ inputs.log_level }}
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
 

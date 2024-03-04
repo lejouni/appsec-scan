@@ -151,6 +151,29 @@ inputs:
                   BOM_COMPARE - Evaluates all policy rules that 'ALL' mode does but will apply the 'BOM_COMPARE_STRICT' logic to relevant policy rules (those with Rapid and Full scan modes selected)."
     default: ALL
     required: false
+  blackduck_fixpr_enabled: 
+    description: Enables or disables Fix PRs creation for Black Duck. When set to true, a fix PR is created for each vulnerable direct dependency. Default is false.
+    required: false
+    default: "false"
+  blackduck_fixpr_maxCount:
+    description: Sets the maximum number of fix pull requests that can be created on a branch. Accepts integer values
+    required: false
+  blackduck_fixpr_filter_severities:
+    description: Creates Fix PRs only for issues with the severity level specified. The value is a comma-separated list. Supported severities are CRITICAL, HIGH, MEDIUM, LOW
+    required: false
+  blackduck_fixpr_useUpgradeGuidance:
+    description: Allows the user to specify short-term or long-term upgrade guidance, or both. If both values are provided, the first takes priority, and the second value is used only if the first returns no results. If upgrade guidance is not available, the fix PR is not created.
+    required: false
+    default: "SHORT_TERM, LONG_TERM"
+  blackduck_prComment_enabled:
+    description: Option to enable pull request comments for new issues found in the pull request. Baseline full scan results must exist on the server for this feature to work
+    required: false
+    default: "false"
+  blackduck_scan_failure_severities:
+    description: Black Duck scan failure severities. Accepted severities are ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED. Default "CRITICAL, HIGH"
+    required: false
+    default: "CRITICAL, HIGH"
+
   #------------CNC related inputs------------------------#
   cnc_url:
     description: URL for CNC.
@@ -261,14 +284,18 @@ runs:
     #------------Black Duck ------------------------#
     - if: ${{inputs.blackduck == 'true'}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.6.0
+      uses: synopsys-sig/synopsys-action@v1.7.0
       with:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
-        github_token: ${{ inputs.github_token }}
-        blackduck_automation_fixpr: false
-        blackduck_scan_failure_severities: "NONE"
+        github_token: ${{ inputs.github_token }} # Mandatory when blackduck_automation_prcomment is set to 'true'
+        blackduck_fixpr_enabled: ${{ inputs.blackduck_fixpr_enabled }}
+        blackduck_fixpr_maxCount: ${{ inputs.blackduck_fixpr_maxCount }}
+        blackduck_fixpr_filter_severities: ${{ inputs.blackduck_fixpr_filter_severities }}
+        blackduck_fixpr_useUpgradeGuidance: ${{ inputs.blackduck_fixpr_useUpgradeGuidance }}
+        blackduck_prComment_enabled: ${{ inputs.blackduck_prComment_enabled }}
+        blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
         synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
         bridge_download_version: ${{inputs.bridge_version}}
       env:

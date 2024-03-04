@@ -170,9 +170,9 @@ inputs:
     required: false
     default: "false"
   blackduck_scan_failure_severities:
-    description: Black Duck scan failure severities. Accepted severities are ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED. Default "CRITICAL, HIGH"
+    description: Black Duck scan failure severities. Accepted severities are ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED. Default "NONE"
     required: false
-    default: "CRITICAL, HIGH"
+    default: "NONE"
 
   #------------CNC related inputs------------------------#
   cnc_url:

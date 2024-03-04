@@ -287,13 +287,13 @@ runs:
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.7.0
       with:
-        blackduck_apiToken: ${{ inputs.blackduck_token }}
+        blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_scan_full: true
         github_token: ${{ inputs.github_token }} # Mandatory when blackduck_automation_prcomment is set to 'true'
         blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
         synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-        bridge_download_version: ${{inputs.bridge_version}}
+        synopsys_bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
@@ -320,7 +320,7 @@ runs:
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.7.0
       with:
-        blackduck_apiToken: ${{ inputs.blackduck_token }}
+        blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_scan_full: false
         github_token: ${{ inputs.github_token }} # Mandatory when blackduck_automation_prcomment is set to 'true'
@@ -331,7 +331,7 @@ runs:
         blackduck_prComment_enabled: ${{ inputs.blackduck_prComment_enabled }}
         blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
         synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-        bridge_download_version: ${{inputs.bridge_version}}
+        synopsys_bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: feature
@@ -358,12 +358,12 @@ runs:
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.7.0
       with:
-        blackduck_apiToken: ${{ inputs.blackduck_token }}
+        blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_scan_full: false
         blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
         synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-        bridge_download_version: ${{inputs.bridge_version}}
+        synopsys_bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}

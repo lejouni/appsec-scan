@@ -334,7 +334,7 @@ runs:
         bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
-        DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
+        DETECT_PROJECT_VERSION_NAME: feature
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
         DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
@@ -390,7 +390,7 @@ runs:
       with:
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_project: ${{ inputs.blackduck_project }}
-        blackduck_version: ${{ inputs.blackduck_version }}
+        blackduck_version: feature
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json

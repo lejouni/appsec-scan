@@ -298,7 +298,8 @@ runs:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        # DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
+        DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
+        DETECT_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
@@ -336,7 +337,8 @@ runs:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: feature
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        # DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
+        DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
+        DETECT_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
@@ -368,7 +370,8 @@ runs:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        # DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
+        DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
+        DETECT_OUTPUT_PATH: ${{github.workspace}}/bd_scan # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"
         DETECT_DETECTOR_SEARCH_DEPTH: "20"

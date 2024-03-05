@@ -385,7 +385,22 @@ runs:
         DETECT_BLACKDUCK_RAPID_COMPARE_MODE: ${{inputs.blackduck_rapid_compare_mode}} #Options are ALL (default), BOM_COMPARE_STRICT and BOM_COMPARE
       continue-on-error: true
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true'}}
+      uses: synopsys-sig-community/blackduck-sarif-formatter@dev
+      with:
+        blackduck_url: ${{ inputs.blackduck_url }}
+        blackduck_project: ${{ inputs.blackduck_project }}
+        blackduck_version: feature
+        blackduck_apiToken: ${{ inputs.blackduck_token }}
+        blackduck_scan_full: ${{ inputs.blackduck_full_scan }}
+        blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
+        blackduck_scanOutputPath: ${{github.workspace}}/.bridge
+        blackduck_policies: ${{ inputs.blackduck_policies }}
+        blackduck_iac: ${{ inputs.blackduck_iac }}
+        blackduck_log_level: ${{ inputs.log_level }}
+        blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
+
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name != 'pull_request'}}
       uses: synopsys-sig-community/blackduck-sarif-formatter@dev
       with:
         blackduck_url: ${{ inputs.blackduck_url }}

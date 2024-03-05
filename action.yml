@@ -288,6 +288,7 @@ runs:
         echo "github.event.pull_request.merged: ${{github.event.pull_request.merged}}"
         echo "github.repository: ${{github.repository}}"
         echo "github.ref_name: ${{github.ref_name}}"
+        echo "github.head_ref: ${{github.head_ref}}
       shell: bash      
     #------------Black Duck ------------------------#
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
@@ -304,8 +305,8 @@ runs:
         synopsys_bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
-        DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
-        DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
+        DETECT_PROJECT_VERSION_NAME: ${{github.head_ref}}
+        DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{github.head_ref}}
         DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/.bridge # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"

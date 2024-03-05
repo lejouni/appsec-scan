@@ -288,7 +288,7 @@ runs:
         echo "github.event.pull_request.merged: ${{github.event.pull_request.merged}}"
         echo "github.repository: ${{github.repository}}"
         echo "github.ref_name: ${{github.ref_name}}"
-        echo "github.head_ref: ${{github.head_ref}}
+        echo "github.head_ref: ${{github.head_ref}}"
       shell: bash      
     #------------Black Duck ------------------------#
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan

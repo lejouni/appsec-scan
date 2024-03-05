@@ -281,6 +281,14 @@ runs:
         name: polaris-scan-results
         path: ${{inputs.polaris_sarif_file}}
       continue-on-error: true
+    - name: print out github values
+      run: |
+        echo "github.event_name: ${{github.event_name}}"
+        echo "github.event.action: ${{github.event.action}}"
+        echo "github.event.pull_request.merged: ${{github.event.pull_request.merged}}"
+        echo "github.repository: ${{github.repository}}"
+        echo "github.ref_name: ${{github.ref_name}}"
+      shell: bash      
     #------------Black Duck ------------------------#
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true'}}

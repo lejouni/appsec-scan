@@ -30,7 +30,7 @@ inputs:
     required: false
   bridge_version:
     description: "Bridge component version"
-    default: "2.2.1"
+    default: "2.4.45"
     required: false
   #------------Polaris related inputs------------------------#
   polaris_project:
@@ -294,7 +294,7 @@ runs:
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.8.0
+      uses: synopsys-sig/synopsys-action@v1.9.0
       with:
         blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -327,7 +327,7 @@ runs:
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
     - if: ${{inputs.blackduck == 'true' && github.event_name != 'pull_request'}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.8.0
+      uses: synopsys-sig/synopsys-action@v1.9.0
       with:
         blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -416,7 +416,7 @@ runs:
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}
       name: CNC Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.8.0
+      uses: synopsys-sig/synopsys-action@v1.9.0
       with:
         coverity_url: ${{ inputs.cnc_url }}
         coverity_user: ${{ inputs.cnc_username }}
@@ -452,7 +452,7 @@ runs:
     #------------Nextgen Polaris ------------------------#
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.8.0
+      uses: synopsys-sig/synopsys-action@v1.9.0
       with:
           polaris_serverUrl: ${{ inputs.polaris_nextgen_url }}
           polaris_accessToken: ${{ inputs.polaris_nextgen_token  }}

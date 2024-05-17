@@ -292,8 +292,8 @@ runs:
       shell: bash      
     #------------Black Duck ------------------------#
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
-      name: Black Duck Analysis with synopsys-action
+    # - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
+    - name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.9.0
       with:
         blackduck_token: ${{ inputs.blackduck_token }}
@@ -325,36 +325,36 @@ runs:
       continue-on-error: true
 
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
-    - if: ${{inputs.blackduck == 'true' && github.event_name != 'pull_request'}}
-      name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.9.0
-      with:
-        blackduck_token: ${{ inputs.blackduck_token }}
-        blackduck_url: ${{ inputs.blackduck_url }}
-        blackduck_scan_full: false
-        blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
-        synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-        synopsys_bridge_download_version: ${{inputs.bridge_version}}
-      env:
-        DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
-        DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
-        DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/.bridge # This needs to be set, because of RAPID scan results
-        DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
-        DETECT_TIMEOUT: "7200"
-        DETECT_DETECTOR_SEARCH_DEPTH: "20"
-        DETECT_DETECTOR_SEARCH_CONTINUE: "true"
-        DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
-        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect
-        DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
-        DETECT_TOOLS: "ALL,IAC_SCAN" #All is not activating IaC scan, it needs to be activate separately with IAC_SCAN
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_COPYRIGHT_SEARCH: "true"
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_LICENSE_SEARCH: "true"
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_SNIPPET_MATCHING: SNIPPET_MATCHING
-        # DETECT_BLACKDUCK_SIGNATURE_SCANNER_ARGUMENTS: "--exclude=/detect/"
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
-        DETECT_BLACKDUCK_RAPID_COMPARE_MODE: ${{inputs.blackduck_rapid_compare_mode}} #Options are ALL (default), BOM_COMPARE_STRICT and BOM_COMPARE
-      continue-on-error: true
+    # - if: ${{inputs.blackduck == 'true' && github.event_name != 'pull_request'}}
+    #   name: Black Duck Analysis with synopsys-action
+    #   uses: synopsys-sig/synopsys-action@v1.9.0
+    #   with:
+    #     blackduck_token: ${{ inputs.blackduck_token }}
+    #     blackduck_url: ${{ inputs.blackduck_url }}
+    #     blackduck_scan_full: false
+    #     blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
+    #     synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
+    #     synopsys_bridge_download_version: ${{inputs.bridge_version}}
+    #   env:
+    #     DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
+    #     DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
+    #     DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
+    #     DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/.bridge # This needs to be set, because of RAPID scan results
+    #     DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
+    #     DETECT_TIMEOUT: "7200"
+    #     DETECT_DETECTOR_SEARCH_DEPTH: "20"
+    #     DETECT_DETECTOR_SEARCH_CONTINUE: "true"
+    #     DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
+    #     DETECT_EXCLUDED_DIRECTORIES: node_modules,detect
+    #     DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
+    #     DETECT_TOOLS: "ALL,IAC_SCAN" #All is not activating IaC scan, it needs to be activate separately with IAC_SCAN
+    #     DETECT_BLACKDUCK_SIGNATURE_SCANNER_COPYRIGHT_SEARCH: "true"
+    #     DETECT_BLACKDUCK_SIGNATURE_SCANNER_LICENSE_SEARCH: "true"
+    #     DETECT_BLACKDUCK_SIGNATURE_SCANNER_SNIPPET_MATCHING: SNIPPET_MATCHING
+    #     # DETECT_BLACKDUCK_SIGNATURE_SCANNER_ARGUMENTS: "--exclude=/detect/"
+    #     DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
+    #     DETECT_BLACKDUCK_RAPID_COMPARE_MODE: ${{inputs.blackduck_rapid_compare_mode}} #Options are ALL (default), BOM_COMPARE_STRICT and BOM_COMPARE
+    #   continue-on-error: true
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == 'true'}}
       uses: synopsys-sig-community/blackduck-sarif-formatter@dev

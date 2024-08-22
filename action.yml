@@ -289,6 +289,7 @@ runs:
         echo "github.repository: ${{github.repository}}"
         echo "github.ref_name: ${{github.ref_name}}"
         echo "github.head_ref: ${{github.head_ref}}"
+        echo "github.base_ref: ${{github.base_ref}}"
       shell: bash      
     #------------Black Duck ------------------------#
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
@@ -323,7 +324,7 @@ runs:
       continue-on-error: true
 
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == 'false'}}
+    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == false}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0
       with:
@@ -365,7 +366,7 @@ runs:
         blackduck_log_level: ${{ inputs.log_level }}
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
 
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == 'false'}}
+    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == false}}
       uses: synopsys-sig-community/blackduck-sarif-formatter@dev
       with:
         blackduck_url: ${{ inputs.blackduck_url }}

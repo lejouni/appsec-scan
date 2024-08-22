@@ -338,7 +338,7 @@ runs:
         synopsys_bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
-        DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
+        DETECT_PROJECT_VERSION_NAME: ${{github.base_ref}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
         DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/.bridge # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results

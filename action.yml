@@ -227,21 +227,21 @@ inputs:
 runs:
   using: composite
   steps:
-    #---------Cache Bridge tool--------------------------#
-    - if: ${{ inputs.cache == 'true'}}
-      id: cache-bridge-tools
-      uses: actions/cache@v3
-      with:
-        path: ${{inputs.bridge_install_folder}}
-        key: cache-bridge-tools-${{ inputs.bridge_platform }}-${{ inputs.bridge_version }}
-    # Download the Bridge tool and extract it
-    - if: steps.cache-bridge-tools.outputs.cache-hit != 'true'
-      run: |
-        mkdir -m 777 -p ${{inputs.bridge_install_folder}}
-        cd ${{inputs.bridge_install_folder}}
-        wget -q https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/${{inputs.bridge_version}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
-        unzip -o -q ${{inputs.bridge_install_folder}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
-      shell: bash
+    # #---------Cache Bridge tool--------------------------#
+    # - if: ${{ inputs.cache == 'true'}}
+    #   id: cache-bridge-tools
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: ${{inputs.bridge_install_folder}}
+    #     key: cache-bridge-tools-${{ inputs.bridge_platform }}-${{ inputs.bridge_version }}
+    # # Download the Bridge tool and extract it
+    # - if: steps.cache-bridge-tools.outputs.cache-hit != 'true'
+    #   run: |
+    #     mkdir -m 777 -p ${{inputs.bridge_install_folder}}
+    #     cd ${{inputs.bridge_install_folder}}
+    #     wget -q https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/${{inputs.bridge_version}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
+    #     unzip -o -q ${{inputs.bridge_install_folder}}/synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip && rm -rf synopsys-bridge-${{inputs.bridge_version}}-${{inputs.bridge_platform}}.zip
+    #   shell: bash
 
     #---------Coverity on Polaris------------------------#
     - if: ${{inputs.polaris == 'true'}}
@@ -301,8 +301,6 @@ runs:
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_scan_full: true
         blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
-        synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-        synopsys_bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
@@ -334,8 +332,6 @@ runs:
         blackduck_prcomment_enabled: ${{ inputs.blackduck_prComment_enabled }} 
         github_token: ${{ inputs.github_token }} # Mandatory when blackduck_automation_prcomment is set to 'true'
         blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
-        synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-        synopsys_bridge_download_version: ${{inputs.bridge_version}}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{github.base_ref}}

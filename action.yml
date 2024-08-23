@@ -404,18 +404,11 @@ runs:
         blackduck_log_level: ${{ inputs.log_level }}
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request'}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
       name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: blackduck-sarif.json
-      continue-on-error: true
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request'}}
-      name: Archive scanning results
-      uses: actions/upload-artifact@v3
-      with:
-        name: bd-scan-results
-        path: blackduck-sarif.json
       continue-on-error: true
     #------------Cloud Native Coverity Analysis------------------------#
     - if: ${{inputs.cnc == 'true'}}

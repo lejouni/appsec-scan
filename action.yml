@@ -317,7 +317,7 @@ runs:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/Blackduck Detect Execution/detect" # This needs to be set, because of RAPID scan results
+        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect" # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
@@ -345,7 +345,7 @@ runs:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/Blackduck Detect Execution/detect" # This needs to be set, because of RAPID scan results
+        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect" # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
@@ -376,7 +376,7 @@ runs:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{github.base_ref}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/Blackduck Detect Execution/detect" # This needs to be set, because of RAPID scan results
+        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect" # This needs to be set, because of RAPID scan results
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
         DETECT_TIMEOUT: "7200"
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
@@ -396,7 +396,7 @@ runs:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_scan_full: true
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
-        blackduck_scanOutputPath: "${{github.workspace}}/.bridge/Blackduck Detect Execution/detect"
+        blackduck_scanOutputPath: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect"
         blackduck_policies: ${{ inputs.blackduck_policies }}
         blackduck_iac: ${{ inputs.blackduck_iac }}
         blackduck_log_level: ${{ inputs.log_level }}
@@ -409,7 +409,7 @@ runs:
         blackduck_apiToken: ${{ inputs.blackduck_token }}
         blackduck_scan_full: false
         blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
-        blackduck_scanOutputPath: "${{github.workspace}}/.bridge/Blackduck Detect Execution/detect"
+        blackduck_scanOutputPath: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect"
         blackduck_policies: ${{ inputs.blackduck_policies }}
         blackduck_iac: ${{ inputs.blackduck_iac }}
         blackduck_log_level: ${{ inputs.log_level }}

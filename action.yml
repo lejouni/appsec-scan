@@ -292,8 +292,19 @@ runs:
         echo "github.base_ref: ${{github.base_ref}}"
       shell: bash      
     #------------Black Duck ------------------------#
-    # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
-    # - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
+    - if: ${{inputs.blackduck == 'true'}}
+      name: Install Pip and npm requirements
+      run: |
+        file_count=$(find ${{github.workspace}} -name requirements.txt | wc -l)
+        if [[ $file_count -gt 0 ]]; then
+          pip3 install -r requirements.txt
+        fi        
+        file_count=$(find ${{github.workspace}} -name package.json | wc -l)
+        if [[ $file_count -gt 0 ]]; then
+          npm install
+        fi        
+      shell: bash
+
     - if: ${{inputs.blackduck == 'true' && github.event_name != 'pull_request'}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0

@@ -293,6 +293,35 @@ runs:
       shell: bash      
     #------------Black Duck ------------------------#
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
+    # - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
+    - if: ${{inputs.blackduck == 'true' && github.event_name != 'pull_request'}}
+      name: Black Duck Analysis with synopsys-action
+      uses: synopsys-sig/synopsys-action@v1.11.0
+      with:
+        blackduck_token: ${{ inputs.blackduck_token }}
+        blackduck_url: ${{ inputs.blackduck_url }}
+        blackduck_scan_full: true
+        blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
+      env:
+        DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
+        DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
+        DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
+        DETECT_SCAN_OUTPUT_PATH: ${{github.workspace}}/.bridge # This needs to be set, because of RAPID scan results
+        DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
+        DETECT_TIMEOUT: "7200"
+        DETECT_DETECTOR_SEARCH_DEPTH: "20"
+        DETECT_DETECTOR_SEARCH_CONTINUE: "true"
+        DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
+        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect
+        DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
+        DETECT_TOOLS: "ALL,IAC_SCAN" #All is not activating IaC scan, it needs to be activate separately with IAC_SCAN
+        DETECT_BLACKDUCK_SIGNATURE_SCANNER_COPYRIGHT_SEARCH: "true"
+        DETECT_BLACKDUCK_SIGNATURE_SCANNER_LICENSE_SEARCH: "true"
+        DETECT_BLACKDUCK_SIGNATURE_SCANNER_SNIPPET_MATCHING: SNIPPET_MATCHING
+        # DETECT_BLACKDUCK_SIGNATURE_SCANNER_ARGUMENTS: "--exclude=/detect/"
+        DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
+      continue-on-error: true
+
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0

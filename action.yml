@@ -305,35 +305,6 @@ runs:
         fi        
       shell: bash
 
-    - if: ${{inputs.blackduck == 'true' && github.event_name != 'pull_request'}}
-      name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.11.0
-      with:
-        blackduck_token: ${{ inputs.blackduck_token }}
-        blackduck_url: ${{ inputs.blackduck_url }}
-        blackduck_scan_full: true
-        blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
-      env:
-        DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
-        DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
-        DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect" # This needs to be set, because of RAPID scan results
-        DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results
-        DETECT_TIMEOUT: "7200"
-        DETECT_DETECTOR_SEARCH_DEPTH: "20"
-        DETECT_DETECTOR_SEARCH_CONTINUE: "true"
-        DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
-        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect
-        DETECT_PUB_DEPENDENCY_TYPES_EXCLUDE: DEV #This will exclude Dart dev dependencies
-        DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
-        DETECT_TOOLS: "ALL,IAC_SCAN" #All is not activating IaC scan, it needs to be activate separately with IAC_SCAN
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_COPYRIGHT_SEARCH: "true"
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_LICENSE_SEARCH: "true"
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_SNIPPET_MATCHING: SNIPPET_MATCHING
-        # DETECT_BLACKDUCK_SIGNATURE_SCANNER_ARGUMENTS: "--exclude=/detect/"
-        DETECT_BLACKDUCK_SIGNATURE_SCANNER_UPLOAD_SOURCE_MODE: "true"
-      continue-on-error: true
-
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0
@@ -405,21 +376,6 @@ runs:
         blackduck_log_level: ${{ inputs.log_level }}
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
 
-    - if: ${{inputs.blackduck == 'true' && github.event_name != 'pull_request'}}
-      uses: synopsys-sig-community/blackduck-sarif-formatter@dev
-      with:
-        blackduck_url: ${{ inputs.blackduck_url }}
-        blackduck_project: ${{ inputs.blackduck_project }}
-        blackduck_version: ${{inputs.blackduck_version}}
-        blackduck_apiToken: ${{ inputs.blackduck_token }}
-        blackduck_scan_full: true
-        blackduck_outputFile: ${{github.workspace}}/blackduck-sarif.json
-        blackduck_scanOutputPath: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect"
-        blackduck_policies: ${{ inputs.blackduck_policies }}
-        blackduck_iac: ${{ inputs.blackduck_iac }}
-        blackduck_log_level: ${{ inputs.log_level }}
-        blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
-
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == false}}
       uses: synopsys-sig-community/blackduck-sarif-formatter@dev
       with:
@@ -433,7 +389,7 @@ runs:
         blackduck_log_level: ${{ inputs.log_level }}
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request'}}
       name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v3
       with:

@@ -351,7 +351,7 @@ runs:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{github.base_ref}}
         DETECT_CODE_LOCATION_NAME: ${{inputs.blackduck_project}}_${{inputs.blackduck_version}}
-        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge/\"Blackduck Detect Execution\"/detect" # This needs to be set, because of RAPID scan results
+        DETECT_SCAN_OUTPUT_PATH: "${{github.workspace}}/.bridge" # This needs to be set, because of RAPID scan results
         DETECT_OUTPUT_PATH: "${{github.workspace}}/.bridge" # This needs to be set, because of RAPID scan results
         DETECT_BDIO_OUTPUT_PATH: "${{github.workspace}}/.bridge"
         DETECT_CLEANUP: "false" # This needs to be set, because of RAPID scan results

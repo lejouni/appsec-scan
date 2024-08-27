@@ -305,8 +305,8 @@ runs:
         fi        
       shell: bash
 
-    # - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
-    - name: Black Duck Analysis with synopsys-action
+    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
+      name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0
       with:
         blackduck_token: ${{ inputs.blackduck_token }}

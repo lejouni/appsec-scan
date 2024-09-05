@@ -173,6 +173,14 @@ inputs:
     description: Black Duck scan failure severities. Accepted severities are ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED. Default "NONE"
     required: false
     default: "NONE"
+  blackduck_toolname_for_sarif_full:
+    description: "Given name is used for sarif tool name for Black Duck full scan results. Default is Synopsys Black Duck Intelligent"
+    required: false
+    default: "Synopsys Black Duck Intelligent"
+  blackduck_toolname_for_sarif_rapid:
+    description: "Given name is used for sarif tool name for Black Duck rapid scan results. Default is Synopsys Black Duck Intelligent"
+    required: false
+    default: "Synopsys Black Duck Rapid"
 
   #------------CNC related inputs------------------------#
   cnc_url:
@@ -322,7 +330,7 @@ runs:
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
         DETECT_DETECTOR_SEARCH_CONTINUE: "true"
         DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
-        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect,.bridge
+        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect
         DETECT_PUB_DEPENDENCY_TYPES_EXCLUDE: DEV
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
         DETECT_TOOLS: "ALL,IAC_SCAN" #All is not activating IaC scan, it needs to be activate separately with IAC_SCAN
@@ -353,7 +361,7 @@ runs:
         DETECT_DETECTOR_SEARCH_DEPTH: "20"
         DETECT_DETECTOR_SEARCH_CONTINUE: "true"
         DETECT_EXCLUDED_DIRECTORIES_SEARCH_DEPTH: "20"
-        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect,.bridge
+        DETECT_EXCLUDED_DIRECTORIES: node_modules,detect
         DETECT_PUB_DEPENDENCY_TYPES_EXCLUDE: DEV
         DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
         DETECT_BLACKDUCK_RAPID_COMPARE_MODE: ${{inputs.blackduck_rapid_compare_mode}} #Options are ALL (default), BOM_COMPARE_STRICT and BOM_COMPARE
@@ -373,6 +381,7 @@ runs:
         blackduck_iac: ${{ inputs.blackduck_iac }}
         blackduck_log_level: ${{ inputs.log_level }}
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
+        blackduck_toolname_for_sarif_full: ${{ inputs.blackduck_toolname_for_sarif_full }}
 
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == false}}
       uses: synopsys-sig-community/blackduck-sarif-formatter@dev
@@ -386,6 +395,7 @@ runs:
         blackduck_iac: ${{ inputs.blackduck_iac }}
         blackduck_log_level: ${{ inputs.log_level }}
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
+        blackduck_toolname_for_sarif_rapid: ${{ inputs.blackduck_toolname_for_sarif_rapid }}
 
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request'}}
       name: Upload SARIF file

@@ -402,6 +402,7 @@ runs:
       uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: ${{github.workspace}}/blackduck-sarif.json
+        ref: ${{github.head_ref}}
       continue-on-error: true
     - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request'}}
       name: Archive scanning results

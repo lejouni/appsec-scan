@@ -470,7 +470,7 @@ runs:
           polaris_reports_sarif_groupSCAIssues: false 
           polaris_reports_sarif_issue_types: 'SCA, SAST' 
           polaris_upload_sarif_report: true 
-          github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
+          github_token: ${{ inputs.github_token }}  # Required when polaris_upload_sarif_report is set as true
     - if: ${{inputs.polaris_nextgen == 'true' && inputs.polaris_nextgen_sarif == 'true'}}
       name: Archive scanning results
       uses: actions/upload-artifact@v3

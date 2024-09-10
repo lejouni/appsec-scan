@@ -448,6 +448,18 @@ runs:
       continue-on-error: true
     #------------Nextgen Polaris ------------------------#
     - if: ${{inputs.polaris_nextgen == 'true'}}
+      name: Install Pip and npm requirements
+      run: |
+        file_count=$(find ${{github.workspace}} -name requirements.txt | wc -l)
+        if [[ $file_count -gt 0 ]]; then
+          pip install -r requirements.txt
+        fi        
+        file_count=$(find ${{github.workspace}} -name package.json | wc -l)
+        if [[ $file_count -gt 0 ]]; then
+          npm install
+        fi        
+      shell: bash
+    - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0
       with:
@@ -465,17 +477,20 @@ runs:
           blackduck_search_depth: 4
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
           polaris_reports_sarif_create: ${{inputs.polaris_nextgen_sarif}}  
-          polaris_reports_sarif_file_path: '${{github.polaris_nextgen_sarif_file}}' # File path (including file name) where SARIF report is created.
+          polaris_reports_sarif_file_path: '${{inputs.polaris_nextgen_sarif_file}}' # File path (including file name) where SARIF report is created.
           polaris_reports_sarif_severities: "CRITICAL,HIGH,MEDIUM,LOW" #Critical, High, Medium, Low, and Informational, Default: All severities are included.
           polaris_reports_sarif_groupSCAIssues: false 
           polaris_reports_sarif_issue_types: 'SCA, SAST' 
           polaris_upload_sarif_report: true 
           github_token: ${{ inputs.github_token }}  # Required when polaris_upload_sarif_report is set as true
+      env:
+        DETECT_ACCURACY_REQUIRED: NONE  
+
     - if: ${{inputs.polaris_nextgen == 'true' && inputs.polaris_nextgen_sarif == 'true'}}
       name: Archive scanning results
       uses: actions/upload-artifact@v3
       with:
         name: Nextgen-polaris-scan-results
-        path: '${{github.polaris_nextgen_sarif_file}}'
+        path: '${{inputs.polaris_nextgen_sarif_file}}'
       continue-on-error: true
 

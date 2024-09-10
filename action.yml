@@ -464,18 +464,18 @@ runs:
           ### Uncomment below to add arbitrary CL parameters
           blackduck_search_depth: 5
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
-          polaris_reports_sarif_create: true  
-          polaris_reports_sarif_file_path: '${{github.workspace}}/report.sarif.json' # File path (including file name) where SARIF report is created.
+          polaris_reports_sarif_create: ${{inputs.polaris_nextgen_sarif}}  
+          polaris_reports_sarif_file_path: '${{github.polaris_nextgen_sarif_file}}' # File path (including file name) where SARIF report is created.
           polaris_reports_sarif_severities: "CRITICAL,HIGH,MEDIUM,LOW" #Critical, High, Medium, Low, and Informational, Default: All severities are included.
-          polaris_reports_sarif_groupSCAIssues: true 
+          polaris_reports_sarif_groupSCAIssues: false 
           polaris_reports_sarif_issue_types: 'SCA, SAST' 
           polaris_upload_sarif_report: true 
           github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
-    - if: ${{inputs.polaris_nextgen == 'true'}}
+    - if: ${{inputs.polaris_nextgen == 'true' && inputs.polaris_nextgen_sarif == 'true'}}
       name: Archive scanning results
       uses: actions/upload-artifact@v3
       with:
         name: Nextgen-polaris-scan-results
-        path: ${{github.workspace}}/report.sarif.json
+        path: '${{github.polaris_nextgen_sarif_file}}'
       continue-on-error: true
 

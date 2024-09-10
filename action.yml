@@ -422,8 +422,8 @@ runs:
         coverity_stream_name: ${{ inputs.cnc_stream }}
         coverity_repository_name: ${{ inputs.cnc_repository_name }}
         coverity_branch_name: ${{ inputs.cnc_branche_name }}
-        synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-        synopsys_bridge_download_version: ${{inputs.bridge_version}}
+        # synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
+        # synopsys_bridge_download_version: ${{inputs.bridge_version}}
     - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
       uses: lejouni/cnc-sarif-formatter@main
       with:
@@ -457,9 +457,9 @@ runs:
           polaris_project_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values
           polaris_assessment_types: "SAST,SCA"
-          synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
-          synopsys_bridge_download_version: ${{inputs.bridge_version}}
-          ### Signature scan
+          # synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
+          # synopsys_bridge_download_version: ${{inputs.bridge_version}}
+          ### SCA scan type
           polaris_test_sca_type: "SCA-PACKAGE" #SCA-PACKAGE or SCA-SIGNATURE.
           ### Uncomment below to add arbitrary CL parameters
           blackduck_search_depth: 4

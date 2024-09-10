@@ -451,8 +451,8 @@ runs:
       name: Nextgen Polaris Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0
       with:
-          polaris_serverUrl: ${{ inputs.polaris_nextgen_url }}
-          polaris_accessToken: ${{ inputs.polaris_nextgen_token  }}
+          polaris_server_url: ${{ inputs.polaris_nextgen_url }}
+          polaris_access_token: ${{ inputs.polaris_nextgen_token  }}
           polaris_application_name: ${{ inputs.polaris_nextgen_project }}
           polaris_project_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values

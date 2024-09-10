@@ -459,3 +459,23 @@ runs:
           polaris_assessment_types: "SAST,SCA"
           synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
           synopsys_bridge_download_version: ${{inputs.bridge_version}}
+          ### Signature scan
+          polaris_test_sca_type: "SCA-PACKAGE" #SCA-PACKAGE or SCA-SIGNATURE.
+          ### Uncomment below to add arbitrary CL parameters
+          blackduck_search_depth: 5
+          ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
+          polaris_reports_sarif_create: true  
+          polaris_reports_sarif_file_path: '${{github.workspace}}/report.sarif.json' # File path (including file name) where SARIF report is created.
+          polaris_reports_sarif_severities: "CRITICAL,HIGH,MEDIUM,LOW" #Critical, High, Medium, Low, and Informational, Default: All severities are included.
+          polaris_reports_sarif_groupSCAIssues: true 
+          polaris_reports_sarif_issue_types: 'SCA, SAST' 
+          polaris_upload_sarif_report: true 
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
+    - if: ${{inputs.polaris_nextgen == 'true'}}
+      name: Archive scanning results
+      uses: actions/upload-artifact@v3
+      with:
+        name: Nextgen-polaris-scan-results
+        path: ${{github.workspace}}/report.sarif.json
+      continue-on-error: true
+

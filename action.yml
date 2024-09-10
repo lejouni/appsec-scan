@@ -462,7 +462,7 @@ runs:
           ### Signature scan
           polaris_test_sca_type: "SCA-PACKAGE" #SCA-PACKAGE or SCA-SIGNATURE.
           ### Uncomment below to add arbitrary CL parameters
-          blackduck_search_depth: 5
+          blackduck_search_depth: 4
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
           polaris_reports_sarif_create: ${{inputs.polaris_nextgen_sarif}}  
           polaris_reports_sarif_file_path: '${{github.polaris_nextgen_sarif_file}}' # File path (including file name) where SARIF report is created.

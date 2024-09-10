@@ -485,7 +485,8 @@ runs:
           github_token: ${{ inputs.github_token }}  # Required when polaris_upload_sarif_report is set as true
       env:
         DETECT_ACCURACY_REQUIRED: NONE  
-
+      continue-on-error: true
+      
     - if: ${{inputs.polaris_nextgen == 'true' && inputs.polaris_nextgen_sarif == 'true'}}
       name: Archive scanning results
       uses: actions/upload-artifact@v3

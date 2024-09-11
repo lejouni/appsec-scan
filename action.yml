@@ -300,7 +300,7 @@ runs:
         echo "github.base_ref: ${{github.base_ref}}"
       shell: bash      
     #------------Black Duck ------------------------#
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request'}}
+    - if: ${{inputs.blackduck == 'true'}}
       name: Install Pip and npm requirements
       run: |
         file_count=$(find ${{github.workspace}} -name requirements.txt | wc -l)
@@ -313,7 +313,7 @@ runs:
         fi        
       shell: bash
 
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
+    - if: ${{inputs.blackduck == 'true'}} # && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
       name: Black Duck Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0
       with:
@@ -367,7 +367,7 @@ runs:
         DETECT_BLACKDUCK_RAPID_COMPARE_MODE: ${{inputs.blackduck_rapid_compare_mode}} #Options are ALL (default), BOM_COMPARE_STRICT and BOM_COMPARE
       continue-on-error: true
 
-    - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
+    - if: ${{inputs.blackduck == 'true'}} # && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
       uses: synopsys-sig-community/blackduck-sarif-formatter@dev
       with:
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -397,13 +397,13 @@ runs:
         blackduck_policy_categories: ${{ inputs.blackduck_policy_categories }}
         blackduck_toolname_for_sarif_rapid: ${{ inputs.blackduck_toolname_for_sarif_rapid }}
 
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request'}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}} # && github.event_name == 'pull_request'}}
       name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v3.26.6
       with:
         sarif_file: ${{github.workspace}}/blackduck-sarif.json
       continue-on-error: true
-    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true' && github.event_name == 'pull_request'}}
+    - if: ${{inputs.blackduck == 'true' && inputs.blackduck_sarif == 'true'}} # && github.event_name == 'pull_request'}}
       name: Archive scanning results
       uses: actions/upload-artifact@v3
       with:

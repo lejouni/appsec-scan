@@ -182,38 +182,46 @@ inputs:
     required: false
     default: "Synopsys Black Duck Rapid"
 
-  #------------CNC related inputs------------------------#
-  cnc_url:
-    description: URL for CNC.
+  #------------coverity related inputs------------------------#
+  coverity_url:
+    description: URL for coverity.
     required: true
-  cnc_username:
+  coverity_username:
     description: Coverity Connect username
     required: true
-  cnc_passphare:
+  coverity_passphare:
     description: Coverity Connect password
     required: true
-  cnc_project:
+  coverity_project:
     description: Project name, if not given then default=github.repository
     required: false
     default: ${{github.repository}}
-  cnc_stream:
+  coverity_stream:
     description: Project stream name, if not given then default=github.ref_name
     required: false
     default: ${{github.ref_name}}
-  cnc_repository_name:
+  coverity_repository_name:
     description: Project repository name
     required: false
-  cnc_branche_name:
+  coverity_branche_name:
     description: Project branch name
     required: false
-  cnc_sarif:
+  coverity_sarif:
     description: Project branch name
     required: false
     default: "false"
-  cnc_sarif_file:
-    description: "If cnc_sarif: true, then this is used, to specify the output file with full path. Default: github.workspace/cnc-scan-results.sarif.json"
+  coverity_local:
+    description: Set to false if you are using Coverity cloud deployment
     required: false
-    default: ${{github.workspace}}/cnc-scan-results.sarif.json
+    default: "false"
+  coverity_tool_name:
+    description: Tool name for Sarif
+    required: false
+    default: Coverity
+  coverity_sarif_file:
+    description: "If coverity_sarif: true, then this is used, to specify the output file with full path. Default: github.workspace/coverity-scan-results.sarif.json"
+    required: false
+    default: ${{github.workspace}}/coverity-scan-results.sarif.json
   #------------Which tools are activated------------------------#
   polaris:
     description: "If this is true, then Polaris analysis is done. Default is false."
@@ -227,8 +235,8 @@ inputs:
     description: "If this is true, then Black Duck analysis is done. Default is false."
     required: false
     default: "false"
-  cnc:
-    description: "If this is true, then Cloud Native Coverity (CNC) analysis is done. Default is false."
+  coverity:
+    description: "If this is true, then Cloud Native Coverity (coverity) analysis is done. Default is false."
     required: false
     default: "false"
 
@@ -410,41 +418,43 @@ runs:
         name: bd-scan-results
         path: ${{github.workspace}}/blackduck-sarif.json
       continue-on-error: true
-    #------------Cloud Native Coverity Analysis------------------------#
-    - if: ${{inputs.cnc == 'true'}}
-      name: CNC Analysis with synopsys-action
+    #------------Coverity Analysis------------------------#
+    - if: ${{inputs.coverity == 'true'}}
+      name: Coveirty Analysis with synopsys-action
       uses: synopsys-sig/synopsys-action@v1.11.0
       with:
-        coverity_url: ${{ inputs.cnc_url }}
-        coverity_user: ${{ inputs.cnc_username }}
-        coverity_passphrase: ${{ inputs.cnc_passphare }}
-        coverity_project_name: ${{ inputs.cnc_project }}
-        coverity_stream_name: ${{ inputs.cnc_stream }}
-        coverity_repository_name: ${{ inputs.cnc_repository_name }}
-        coverity_branch_name: ${{ inputs.cnc_branche_name }}
+        coverity_url: ${{ inputs.coverity_url }}
+        coverity_user: ${{ inputs.coverity_username }}
+        coverity_passphrase: ${{ inputs.coverity_passphare }}
+        coverity_project_name: ${{ inputs.coverity_project }}
+        coverity_stream_name: ${{ inputs.coverity_stream }}
+        ### Coverity Connect users - Uncomment below
+        coverity_local: ${{ inputs.coverity_local }}
         # synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
         # synopsys_bridge_download_version: ${{inputs.bridge_version}}
-    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
+    - if: ${{inputs.coverity == 'true' && inputs.coverity_sarif == 'true'}}
       uses: lejouni/cnc-sarif-formatter@main
       with:
-        url: ${{ inputs.cnc_url }}
-        username: ${{ inputs.cnc_username }}
-        password: ${{ inputs.cnc_passphare }}
-        stream: ${{ inputs.cnc_stream }}
-        outputFile: ${{inputs.cnc_sarif_file}}
+        url: ${{ inputs.coverity_url }}
+        username: ${{ inputs.coverity_username }}
+        password: ${{ inputs.coverity_passphare }}
+        project: ${{ inputs.coverity_project }}
+        stream: ${{ inputs.coverity_stream }}
+        outputFile: ${{inputs.coverity_sarif_file}}
+        tool_name: ${{inputs.coverity_tool_name}}
 
-    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
+    - if: ${{inputs.coverity == 'true' && inputs.coverity_sarif == 'true'}}
       name: Upload SARIF file
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: ${{inputs.cnc_sarif_file}}
+        sarif_file: ${{inputs.coverity_sarif_file}}
       continue-on-error: true
-    - if: ${{inputs.cnc == 'true' && inputs.cnc_sarif == 'true'}}
+    - if: ${{inputs.coverity == 'true' && inputs.coverity_sarif == 'true'}}
       name: Archive scanning results
       uses: actions/upload-artifact@v3
       with:
-        name: cnc-scan-results
-        path: ${{inputs.cnc_sarif_file}}
+        name: coverity-scan-results
+        path: ${{inputs.coverity_sarif_file}}
       continue-on-error: true
     #------------Nextgen Polaris ------------------------#
     - if: ${{inputs.polaris_nextgen == 'true'}}

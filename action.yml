@@ -334,7 +334,7 @@ runs:
         blackduck_fixpr_maxCount: 5
         # blackduck_fixpr_filter_severities: 'CRITICAL,HIGH'
         # blackduck_fixpr_useUpgradeGuidance: 'SHORT_TERM,LONG_TERM'
-        github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_fixpr_enabled is set to 'true'      
+        github_token: ${{ inputs.github_token }} # Mandatory when blackduck_fixpr_enabled is set to 'true'      
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}

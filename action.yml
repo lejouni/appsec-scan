@@ -328,13 +328,12 @@ runs:
         blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_scan_full: true
-        blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
         ### Uncomment below configuration to enable automatic fix pull request creation if vulnerabilities are reported
         blackduck_fixpr_enabled: true
         blackduck_fixpr_maxCount: 5
         # blackduck_fixpr_filter_severities: 'CRITICAL,HIGH'
         # blackduck_fixpr_useUpgradeGuidance: 'SHORT_TERM,LONG_TERM'
-        github_token: ${{ inputs.github_token }} # Mandatory when blackduck_fixpr_enabled is set to 'true'      
+        github_token: ${{ inputs.github_token }} # Mandatory when blackduck_fixpr_enabled is set to 'true'
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{inputs.blackduck_version}}
@@ -365,7 +364,6 @@ runs:
         blackduck_scan_full: false
         blackduck_prcomment_enabled: ${{ inputs.blackduck_prComment_enabled }} 
         github_token: ${{ inputs.github_token }} # Mandatory when blackduck_automation_prcomment is set to 'true'
-        blackduck_scan_failure_severities: ${{ inputs.blackduck_scan_failure_severities }}
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
         DETECT_PROJECT_VERSION_NAME: ${{github.base_ref}}

@@ -331,7 +331,7 @@ runs:
         ### Uncomment below configuration to enable automatic fix pull request creation if vulnerabilities are reported
         blackduck_fixpr_enabled: true
         blackduck_fixpr_maxCount: 10
-        # blackduck_fixpr_filter_severities: 'CRITICAL,HIGH'
+        blackduck_fixpr_filter_severities: 'CRITICAL,HIGH,MEDIUM'
         # blackduck_fixpr_useUpgradeGuidance: 'SHORT_TERM,LONG_TERM'
         github_token: ${{ inputs.github_token }} # Mandatory when blackduck_fixpr_enabled is set to 'true'
       env:

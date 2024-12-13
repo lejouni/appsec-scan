@@ -323,13 +323,13 @@ runs:
 
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'push' }} #&& github.event.action == 'closed' && github.event.pull_request.merged == true}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.13.0
+      uses: blackduck-inc/black-duck-security-scan@v2.0.0
       with:
         blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_scan_full: true
         ### Uncomment below configuration to enable automatic fix pull request creation if vulnerabilities are reported
-        blackduck_fixpr_enabled: true
+        blackduck_fixpr_enabled: false
         blackduck_fixpr_maxCount: 10
         blackduck_fixpr_filter_severities: 'CRITICAL,HIGH,MEDIUM'
         # blackduck_fixpr_useUpgradeGuidance: 'SHORT_TERM,LONG_TERM'
@@ -357,7 +357,7 @@ runs:
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == false}}
       name: Black Duck Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.13.0
+      uses: blackduck-inc/black-duck-security-scan@v2.0.0
       with:
         blackduck_token: ${{ inputs.blackduck_token }}
         blackduck_url: ${{ inputs.blackduck_url }}
@@ -425,7 +425,7 @@ runs:
     #------------Coverity Analysis------------------------#
     - if: ${{inputs.coverity == 'true'}}
       name: Coveirty Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.13.0
+      uses: blackduck-inc/black-duck-security-scan@v2.0.0
       with:
         coverity_url: ${{ inputs.coverity_url }}
         coverity_user: ${{ inputs.coverity_username }}
@@ -475,7 +475,7 @@ runs:
       shell: bash
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
-      uses: synopsys-sig/synopsys-action@v1.13.0
+      uses: blackduck-inc/black-duck-security-scan@v2.0.0
       with:
           polaris_server_url: ${{ inputs.polaris_nextgen_url }}
           polaris_access_token: ${{ inputs.polaris_nextgen_token  }}

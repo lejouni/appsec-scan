@@ -325,13 +325,14 @@ runs:
       name: Black Duck Analysis with synopsys-action
       uses: blackduck-inc/black-duck-security-scan@v2.0.0
       with:
-        blackduck_token: ${{ inputs.blackduck_token }}
-        blackduck_url: ${{ inputs.blackduck_url }}
-        blackduck_scan_full: true
+        blackducksca_token: ${{ inputs.blackduck_token }}
+        blackducksca_url: ${{ inputs.blackduck_url }}
+        blackducksca_scan_full: true
         ### Uncomment below configuration to enable automatic fix pull request creation if vulnerabilities are reported
-        blackduck_fixpr_enabled: false
-        blackduck_fixpr_maxCount: 10
-        blackduck_fixpr_filter_severities: 'CRITICAL,HIGH,MEDIUM'
+        blackducksca_fixpr_enabled: false
+        blackducksca_fixpr_maxCount: 10
+        blackducksca_fixpr_filter_severities: 'CRITICAL,HIGH,MEDIUM'
+        blackducksca_scan_failure_severities: NONE
         # blackduck_fixpr_useUpgradeGuidance: 'SHORT_TERM,LONG_TERM'
         github_token: ${{ inputs.github_token }} # Mandatory when blackduck_fixpr_enabled is set to 'true'
       env:
@@ -359,10 +360,11 @@ runs:
       name: Black Duck Analysis with synopsys-action
       uses: blackduck-inc/black-duck-security-scan@v2.0.0
       with:
-        blackduck_token: ${{ inputs.blackduck_token }}
-        blackduck_url: ${{ inputs.blackduck_url }}
-        blackduck_scan_full: false
-        blackduck_prcomment_enabled: ${{ inputs.blackduck_prComment_enabled }} 
+        blackducksca_token: ${{ inputs.blackduck_token }}
+        blackducksca_url: ${{ inputs.blackduck_url }}
+        blackducksca_scan_full: false
+        blackducksca_prcomment_enabled: ${{ inputs.blackduck_prComment_enabled }} 
+        blackducksca_scan_failure_severities: NONE
         github_token: ${{ inputs.github_token }} # Mandatory when blackduck_automation_prcomment is set to 'true'
       env:
         DETECT_PROJECT_NAME: ${{inputs.blackduck_project}}
@@ -436,6 +438,8 @@ runs:
         coverity_local: ${{ inputs.coverity_local }}
         # synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
         # synopsys_bridge_download_version: ${{inputs.bridge_version}}
+      continue-on-error: true
+
     - if: ${{inputs.coverity == 'true' && inputs.coverity_sarif == 'true'}}
       uses: lejouni/cnc-sarif-formatter@main
       with:
@@ -446,6 +450,7 @@ runs:
         stream: ${{ inputs.coverity_stream }}
         outputFile: ${{inputs.coverity_sarif_file}}
         tool_name: ${{inputs.coverity_tool_name}}
+      continue-on-error: true
 
     - if: ${{inputs.coverity == 'true' && inputs.coverity_sarif == 'true'}}
       name: Upload SARIF file

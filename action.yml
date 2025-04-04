@@ -84,14 +84,18 @@ inputs:
     required: false
 
   #------------Nextgen Polaris related inputs------------------------#
+  polaris_nextgen_application:
+    description: Application name
+    required: false
+    default: ${{github.event.repository.name}}
   polaris_nextgen_project:
     description: Project name, if not given then default=github.repository
     required: false
-    default: ${{github.repository}}
+    default: ${{github.event.repository.name}}
   polaris_nextgen_branch:
     description: Project branch name, if not given then default=github.ref_name
     required: false
-    default: ${{github.ref_name}}
+    default: ${{github.branch.name}}
   polaris_nextgen_url:
     description: URL for Polaris where the thin client can be downloaded
     required: true
@@ -480,12 +484,13 @@ runs:
       shell: bash
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
-      uses: blackduck-inc/black-duck-security-scan@v2.0.0
+      uses: blackduck-inc/black-duck-security-scan@v2.1.1
       with:
           polaris_server_url: ${{ inputs.polaris_nextgen_url }}
           polaris_access_token: ${{ inputs.polaris_nextgen_token  }}
-          polaris_application_name: ${{ inputs.polaris_nextgen_project }}
-          polaris_project_name: ${{ inputs.polaris_nextgen_branch }}
+          polaris_application_name: ${{ inputs.polaris_nextgen_application }}
+          polaris_project_name: ${{ inputs.polaris_nextgen_project }}
+          polaris_branch_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values
           polaris_assessment_types: "SAST,SCA"
           # synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
@@ -493,7 +498,7 @@ runs:
           ### SCA scan type
           polaris_test_sca_type: "SCA-PACKAGE" #SCA-PACKAGE or SCA-SIGNATURE.
           ### Uncomment below to add arbitrary CL parameters
-          blackduck_search_depth: 4
+          detect_search_depth: 4
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
           polaris_reports_sarif_create: ${{inputs.polaris_nextgen_sarif}}  
           polaris_reports_sarif_file_path: '${{inputs.polaris_nextgen_sarif_file}}' # File path (including file name) where SARIF report is created.

@@ -327,7 +327,7 @@ runs:
 
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'push' }} #&& github.event.action == 'closed' && github.event.pull_request.merged == true}}
       name: Black Duck Analysis with synopsys-action
-      uses: blackduck-inc/black-duck-security-scan@v2.0.0
+      uses: blackduck-inc/black-duck-security-scan@v2
       with:
         blackducksca_token: ${{ inputs.blackduck_token }}
         blackducksca_url: ${{ inputs.blackduck_url }}
@@ -362,7 +362,7 @@ runs:
     # If event is pull request and it is accepted and merged -> run full scan. All other events will run RAPID scan
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == false}}
       name: Black Duck Analysis with synopsys-action
-      uses: blackduck-inc/black-duck-security-scan@v2.0.0
+      uses: blackduck-inc/black-duck-security-scan@v2
       with:
         blackducksca_token: ${{ inputs.blackduck_token }}
         blackducksca_url: ${{ inputs.blackduck_url }}
@@ -431,7 +431,7 @@ runs:
     #------------Coverity Analysis------------------------#
     - if: ${{inputs.coverity == 'true'}}
       name: Coveirty Analysis with synopsys-action
-      uses: blackduck-inc/black-duck-security-scan@v2.0.0
+      uses: blackduck-inc/black-duck-security-scan@v2
       with:
         coverity_url: ${{ inputs.coverity_url }}
         coverity_user: ${{ inputs.coverity_username }}
@@ -484,7 +484,7 @@ runs:
       shell: bash
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
-      uses: blackduck-inc/black-duck-security-scan@v2.1.1
+      uses: blackduck-inc/black-duck-security-scan@v2
       with:
           polaris_server_url: ${{ inputs.polaris_nextgen_url }}
           polaris_access_token: ${{ inputs.polaris_nextgen_token  }}

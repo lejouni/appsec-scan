@@ -494,11 +494,11 @@ runs:
       with:
           polaris_server_url: ${{ inputs.polaris_nextgen_url }}
           polaris_access_token: ${{ inputs.polaris_nextgen_token  }}
-          polaris_application_name: ${{ env.appname }}
+          polaris_application_name: ${{ env.application_name }}
           polaris_project_name: ${{ inputs.polaris_nextgen_project }}
           polaris_branch_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values
-          polaris_assessment_types: "SAST,SCA"
+          polaris_assessment_types: "SAST"
           # synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
           # synopsys_bridge_download_version: ${{inputs.bridge_version}}
           ### SCA scan type

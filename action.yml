@@ -87,7 +87,6 @@ inputs:
   polaris_nextgen_application:
     description: Application name
     required: false
-    default: ${{github.event.repository.name}}
   polaris_nextgen_project:
     description: Project name, if not given then default=github.repository
     required: false
@@ -484,11 +483,18 @@ runs:
       shell: bash
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
+      uses: lejouni/github_custom_property@main
+      with:
+        github_apiToken: ${{ inputs.github_token }}
+        github_repo: ${{ inputs.polaris_nextgen_project }}
+        github_custom_property_key: "application_name"
+    - if: ${{inputs.polaris_nextgen == 'true'}}
+      name: Nextgen Polaris Analysis with synopsys-action
       uses: blackduck-inc/black-duck-security-scan@v2
       with:
           polaris_server_url: ${{ inputs.polaris_nextgen_url }}
           polaris_access_token: ${{ inputs.polaris_nextgen_token  }}
-          polaris_application_name: ${{ inputs.polaris_nextgen_application }}
+          polaris_application_name: ${{ env.appname }}
           polaris_project_name: ${{ inputs.polaris_nextgen_project }}
           polaris_branch_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values

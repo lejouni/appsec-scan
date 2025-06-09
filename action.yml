@@ -483,11 +483,10 @@ runs:
       shell: bash
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
-      uses: lejouni/github_custom_property@main
+      uses: synopsys-sig-community/github_polaris_application_name@main
       with:
         github_apiToken: ${{ inputs.github_token }}
         github_repo: ${{ inputs.polaris_nextgen_project }}
-        github_custom_property_key: "application_name"
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
       uses: blackduck-inc/black-duck-security-scan@v2

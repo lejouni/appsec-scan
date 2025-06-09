@@ -493,7 +493,7 @@ runs:
       with:
           polaris_server_url: ${{ inputs.polaris_nextgen_url }}
           polaris_access_token: ${{ inputs.polaris_nextgen_token  }}
-          # polaris_application_name: ${{ env.POLARIS_APPLICATION_NAME }}
+          polaris_application_name: ${{ env.POLARIS_APPLICATION_NAME }}
           polaris_project_name: ${{ inputs.polaris_nextgen_project }}
           polaris_branch_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values

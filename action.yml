@@ -485,7 +485,7 @@ runs:
       name: Nextgen Polaris Analysis with synopsys-action
       uses: synopsys-sig-community/github_polaris_application_name@main
       with:
-        github_apiToken: ${{ inputs.github_token }}
+        github_token: ${{ inputs.github_token }}
         github_repo: ${{ inputs.polaris_nextgen_project }}
     - if: ${{inputs.polaris_nextgen == 'true'}}
       name: Nextgen Polaris Analysis with synopsys-action
@@ -493,7 +493,7 @@ runs:
       with:
           polaris_server_url: ${{ inputs.polaris_nextgen_url }}
           polaris_access_token: ${{ inputs.polaris_nextgen_token  }}
-          polaris_application_name: ${{ env.application_name }}
+          polaris_application_name: ${{ env.POLARIS_APPLICATION_NAME }}
           polaris_project_name: ${{ inputs.polaris_nextgen_project }}
           polaris_branch_name: ${{ inputs.polaris_nextgen_branch }}
           ### Accepts Multiple Values
@@ -501,7 +501,7 @@ runs:
           # synopsys_bridge_install_directory: ${{inputs.bridge_install_folder}}
           # synopsys_bridge_download_version: ${{inputs.bridge_version}}
           ### SCA scan type
-          polaris_test_sca_type: "SCA-PACKAGE" #SCA-PACKAGE or SCA-SIGNATURE.
+          # polaris_test_sca_type: "SCA-PACKAGE" #SCA-PACKAGE or SCA-SIGNATURE.
           ### Uncomment below to add arbitrary CL parameters
           detect_search_depth: 4
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable

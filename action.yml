@@ -385,7 +385,7 @@ runs:
       continue-on-error: true
 
     - if: ${{inputs.blackduck == 'true'}} # && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true}}
-      uses: synopsys-sig-community/blackduck-sarif-formatter@dev
+      uses: blackduck-community/blackduck-sarif-formatter@dev
       with:
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_project: ${{ inputs.blackduck_project }}
@@ -401,7 +401,7 @@ runs:
         blackduck_toolname_for_sarif_full: ${{ inputs.blackduck_toolname_for_sarif_full }}
 
     - if: ${{inputs.blackduck == 'true' && github.event_name == 'pull_request' && github.event.action != 'closed' && github.event.pull_request.merged == false}}
-      uses: synopsys-sig-community/blackduck-sarif-formatter@dev
+      uses: blackduck-community/blackduck-sarif-formatter@dev
       with:
         blackduck_url: ${{ inputs.blackduck_url }}
         blackduck_apiToken: ${{ inputs.blackduck_token }}

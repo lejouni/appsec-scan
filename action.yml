@@ -79,8 +79,8 @@ inputs:
     default: "linux64"
     required: false
   polaris_version:
-    description: "What version of Polaris thin client is needed, example: 2024.6.0 (Default)"
-    default: 2024.6.0
+    description: "What version of Polaris thin client is needed, example: 2025.6.0 (Default)"
+    default: 2025.6.0
     required: false
 
   #------------Nextgen Polaris related inputs------------------------#
